@@ -50,8 +50,8 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Implement main layout (header, controls panel, preview area)
 - [x] Add initial ShadCN-based controls for type, size, and complexity
 - [x] Responsive flexbox layout for full width/height
-- [ ] Set up Jest and Playwright for testing
-- [ ] Add initial smoke test (app loads, controls render)
+- [x] Set up Jest and Playwright for testing
+- [x] Add initial smoke test (app loads, controls render)
 
 ### Phase 2: Core Maze Controls
 - [ ] Add controls for line color, background color, wall thickness
@@ -104,6 +104,8 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - Prioritize accessibility and mobile responsiveness
 - Use ShadCN UI components for all form controls and UI elements for a modern, accessible, and consistent design
 - **Testing:** Use Jest for unit/component tests and Playwright for E2E tests. Add and run tests at each major implementation step.
+- **Development Methodology:** Follow Test-Driven Development (TDD) at every step—write tests before writing implementation code.
+- **Continuous Testing:** Run `npm test` and `npm run test:e2e` after each code change to ensure tests pass and maintain a green build.
 
 ---
 

@@ -1,0 +1,39 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+# Testing Guidelines
+
+## Test-Driven Development (TDD)
+- Write tests before writing implementation code.
+- Maintain a green build at all times by running tests after each change.
+
+## Unit Tests (Jest + React Testing Library)
+- Place unit tests alongside component files or under `tests/` with `.test.jsx`/`.test.js` extensions.
+- Use `describe` blocks to group related test cases.
+- Write tests using `test` or `it` functions.
+- Import components via alias (e.g., `@/path/to/component`).
+- Query elements by role, label, or text—prefer `getByRole` for accessibility.
+- Mock external dependencies when needed.
+- Cover edge cases and error states.
+- Keep tests small, focused, and fast.
+
+## Component Tests
+- Render with only required props.
+- Assert UI structure, text content, and user interactions.
+- Use `screen` and `userEvent` from Testing Library.
+- Cleanup is automatic after each test.
+
+## E2E Tests (Playwright)
+- Place tests under `e2e/` directory with `.spec.js`/`.spec.jsx` extensions.
+- Use `test.describe` and `test()` calls to structure tests.
+- Leverage fixtures (e.g., `page`) to navigate and interact.
+- Use locator methods (`getByRole`, `getByText`) for reliable queries.
+- Start the dev server via Playwright's `webServer` config.
+- Keep tests deterministic and avoid flakiness.
+
+## Running Tests
+- Unit: `npm test`
+- E2E: `npm run test:e2e`
+- Run all tests after every code change to ensure they pass.

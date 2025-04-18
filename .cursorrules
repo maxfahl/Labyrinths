@@ -10,3 +10,5 @@
 - Use local storage for persistence of maze history and settings.
 - After each major feature or phase, update .notes/prd.md to reflect progress.
 - Don't explain how to do things, just do it.
+- Ensure Test-Driven Development (TDD): write tests before implementing new features and maintain green build at every step.
+- After every code change, run `npm test` and `npm run test:e2e` to ensure tests pass and keep the build green.
