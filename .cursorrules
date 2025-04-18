@@ -9,4 +9,4 @@
 - Render mazes as SVG for scalability and export features.
 - Use local storage for persistence of maze history and settings.
 - After each major feature or phase, update .notes/prd.md to reflect progress.
-- If unsure, ask for clarification or refer to the PRD and previous implementation notes.
+- Don't explain how to do things, just do it.
