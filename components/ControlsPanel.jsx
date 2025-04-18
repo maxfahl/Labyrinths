@@ -1,13 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
+import
+  {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue
-} from "@/components/ui/select";
+  } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { useState } from 'react';
 
@@ -23,6 +24,9 @@ function ControlsPanel() {
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(600);
   const [complexity, setComplexity] = useState(50);
+  const [lineColor, setLineColor] = useState('#000000');
+  const [bgColor, setBgColor] = useState('#ffffff');
+  const [wallThickness, setWallThickness] = useState(4);
 
   return (
     <Card className="w-full h-full flex flex-col">
@@ -67,14 +71,48 @@ function ControlsPanel() {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="complexity">Complexity: {complexity}</Label>
+        <div className="flex flex-col gap-2" role="group" aria-labelledby="complexity-label">
+          <Label id="complexity-label" htmlFor="complexity">Complexity: {complexity}</Label>
           <Slider
             id="complexity"
             min={1}
             max={100}
             value={[complexity]}
             onValueChange={([val]) => setComplexity(val)}
+            thumbProps={{ 'aria-label': 'Complexity' }}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="line-color">Line Color</Label>
+          <Input
+            id="line-color"
+            type="color"
+            value={lineColor}
+            onChange={e => setLineColor(e.target.value)}
+            aria-label="Line Color"
+            className="w-12 h-12 p-0 border-none bg-transparent"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="bg-color">Background Color</Label>
+          <Input
+            id="bg-color"
+            type="color"
+            value={bgColor}
+            onChange={e => setBgColor(e.target.value)}
+            aria-label="Background Color"
+            className="w-12 h-12 p-0 border-none bg-transparent"
+          />
+        </div>
+        <div className="flex flex-col gap-2" role="group" aria-labelledby="wall-thickness-label">
+          <Label id="wall-thickness-label" htmlFor="wall-thickness">Wall Thickness: {wallThickness}px</Label>
+          <Slider
+            id="wall-thickness"
+            min={1}
+            max={20}
+            value={[wallThickness]}
+            onValueChange={([val]) => setWallThickness(val)}
+            thumbProps={{ 'aria-label': 'Wall Thickness' }}
           />
         </div>
       </CardContent>

@@ -54,7 +54,7 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Add initial smoke test (app loads, controls render)
 
 ### Phase 2: Core Maze Controls
-- [ ] Add controls for line color, background color, wall thickness
+- [x] Add controls for line color, background color, wall thickness
 - [ ] Add seed input
 - [ ] Add start/end position selector
 - [ ] Add maze theme selector (custom, print, predefined)
@@ -119,3 +119,6 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
   - Set up Jest and Playwright early in the project.
   - Add smoke/component tests after each major UI/logic milestone.
   - Add E2E tests for user flows after implementing core features. 
+
+## Progress Notes
+- Line color, background color, and wall thickness controls implemented in ControlsPanel.jsx and tested (Jest, Playwright E2E). 
