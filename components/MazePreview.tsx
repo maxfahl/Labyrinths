@@ -1,5 +1,5 @@
 import { generateRoundMazeWithPrims } from '@/maze/generateRoundMaze';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { MazeOptions } from '../App';
 import { generateSquareMaze } from '../maze/generateSquareMaze';
 
@@ -10,17 +10,88 @@ interface MazePreviewProps {
 const CELL_SIZE = 24;
 
 const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
+  // Memoize maze generation so toggling showSolution does not regenerate the maze
+  const mazeDeps = useMemo(() => {
+    // Only include options that affect maze structure
+    const { mazeType, width, height, complexity, wallThickness, seed, startPosition, endPosition } = options;
+    return { mazeType, width, height, complexity, wallThickness, seed, startPosition, endPosition };
+  }, [options.mazeType, options.width, options.height, options.complexity, options.wallThickness, options.seed, options.startPosition, options.endPosition]);
+
+  const maze = useMemo(() => {
+    if (options.mazeType === 'round') {
+      return generateRoundMazeWithPrims({
+        width: options.width,
+        height: options.height,
+        complexity: options.complexity,
+        wallThickness: options.wallThickness,
+        seed: options.seed,
+        startPosition: options.startPosition,
+        endPosition: options.endPosition,
+      });
+    } else if (options.mazeType === 'square') {
+      return generateSquareMaze({
+        width: options.width,
+        height: options.height,
+        complexity: options.complexity,
+        wallThickness: options.wallThickness,
+        seed: options.seed,
+        startPosition: options.startPosition,
+        endPosition: options.endPosition,
+      });
+    }
+    return null;
+  }, [mazeDeps]);
+
+  if (!maze) {
+    return (
+      <div className="text-gray-400 border border-dashed border-gray-300 rounded p-8 mt-4 text-center">[Maze type not implemented]</div>
+    );
+  }
+
+  // High contrast mode
+  const isHighContrast = options.highContrast;
+  const svgBgColor = isHighContrast ? '#000' : options.bgColor;
+  const svgLineColor = isHighContrast ? '#fff' : options.lineColor;
+  const fontSize = options.fontSize || 16;
+
+  // Helper to render grid overlay for square mazes
+  function renderGridOverlay(w: number, h: number, padding: number) {
+    const lines = [];
+    for (let x = 1; x < options.width; x++) {
+      lines.push(
+        <line
+          key={`vgrid-${x}`}
+          x1={x * CELL_SIZE + padding}
+          y1={padding}
+          x2={x * CELL_SIZE + padding}
+          y2={h + padding}
+          stroke={svgLineColor}
+          strokeWidth={1}
+          strokeDasharray="4 4"
+          opacity={0.3}
+        />
+      );
+    }
+    for (let y = 1; y < options.height; y++) {
+      lines.push(
+        <line
+          key={`hgrid-${y}`}
+          x1={padding}
+          y1={y * CELL_SIZE + padding}
+          x2={w + padding}
+          y2={y * CELL_SIZE + padding}
+          stroke={svgLineColor}
+          strokeWidth={1}
+          strokeDasharray="4 4"
+          opacity={0.3}
+        />
+      );
+    }
+    return lines;
+  }
+
   if (options.mazeType === 'round') {
     // Render round maze with Prim's algorithm
-    const maze = generateRoundMazeWithPrims({
-      width: options.width,
-      height: options.height,
-      complexity: options.complexity,
-      wallThickness: options.wallThickness,
-      seed: options.seed,
-      startPosition: options.startPosition,
-      endPosition: options.endPosition,
-    });
     const size = Math.max(options.width, options.height) * CELL_SIZE * 1.2;
     const cx = size / 2;
     const cy = size / 2;
@@ -40,13 +111,51 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
       const y1 = cy + r * Math.sin(theta1);
       const x2 = cx + r * Math.cos(theta2);
       const y2 = cy + r * Math.sin(theta2);
-      const largeArc = theta2 - theta1 > Math.PI ? 1 : 0;
       return `M${x1},${y1} A${r},${r} 0 0,1 ${x2},${y2}`;
     };
+    // Draw full rings and sector lines for a clean look
+    const ringElements = [];
+    for (let r = 1; r <= options.height; r++) {
+      const radius = outerRadius * r / options.height;
+      ringElements.push(
+        <circle
+          key={`ring-${r}`}
+          cx={cx}
+          cy={cy}
+          r={radius}
+          stroke={options.lineColor}
+          strokeWidth={r === options.height ? options.wallThickness * 2 : options.wallThickness / 2}
+          fill="none"
+        />
+      );
+    }
+    const sectorElements = [];
+    for (let s = 0; s < options.width; s++) {
+      const theta = 2 * Math.PI * s / options.width;
+      const x1 = cx + outerRadius * Math.cos(theta);
+      const y1 = cy + outerRadius * Math.sin(theta);
+      sectorElements.push(
+        <line
+          key={`sector-${s}`}
+          x1={cx}
+          y1={cy}
+          x2={x1}
+          y2={y1}
+          stroke={options.lineColor}
+          strokeWidth={options.wallThickness / 2}
+        />
+      );
+    }
     return (
       <section className="flex-1 min-w-0 h-full flex flex-col items-center justify-start bg-none border-none shadow-none p-0">
-        <h2>Maze Preview</h2>
-        <svg width={size} height={size} style={{ background: options.bgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }} role="img" aria-label="Maze Preview">
+        <h2 style={{ fontSize }}>{'Maze Preview'}</h2>
+        <svg width={size} height={size} style={{ background: svgBgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }} role="img" aria-label="Maze Preview">
+          {/* Draw background grid: full rings and sector lines */}
+          <g opacity={0.18}>{ringElements}{sectorElements}</g>
+          {/* Draw grid overlay if enabled */}
+          {options.showGrid && (
+            <g>{/* No grid for round maze yet */}</g>
+          )}
           {/* Draw open center if end is center */}
           {options.endPosition === 'center' && (
             <circle cx={cx} cy={cy} r={outerRadius * 0.5 / options.height} fill={options.bgColor} stroke={options.lineColor} strokeWidth={options.wallThickness * 2} />
@@ -137,22 +246,15 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
       <div className="text-gray-400 border border-dashed border-gray-300 rounded p-8 mt-4 text-center">[Maze type not implemented]</div>
     );
   }
-  const maze = generateSquareMaze({
-    width: options.width,
-    height: options.height,
-    complexity: options.complexity,
-    wallThickness: options.wallThickness,
-    seed: options.seed,
-    startPosition: options.startPosition,
-    endPosition: options.endPosition,
-  });
   const w = options.width * CELL_SIZE;
   const h = options.height * CELL_SIZE;
   const padding = options.svgPadding ?? 20;
   return (
     <section className="flex-1 min-w-0 h-full flex flex-col items-center justify-start bg-none border-none shadow-none p-0">
-      <h2>Maze Preview</h2>
-      <svg width={w + 2 * padding} height={h + 2 * padding} style={{ background: options.bgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }} role="img" aria-label="Maze Preview">
+      <h2 style={{ fontSize }}>{'Maze Preview'}</h2>
+      <svg width={w + 2 * padding} height={h + 2 * padding} style={{ background: svgBgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }} role="img" aria-label="Maze Preview">
+        {/* Draw grid overlay if enabled */}
+        {options.showGrid && renderGridOverlay(w, h, padding)}
         {/* Draw maze walls */}
         {maze.walls.map((wall, i) => {
           const x = wall.x * CELL_SIZE + padding;
@@ -164,10 +266,11 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
             case 'E': x2 = x + CELL_SIZE; y2 = y + CELL_SIZE; y2 = y; break;
             case 'W': x2 = x; y2 = y + CELL_SIZE; break;
           }
-          if (wall.dir === 'N') return <line key={i} x1={x} y1={y} x2={x2} y2={y2} stroke={options.lineColor} strokeWidth={options.wallThickness} />;
-          if (wall.dir === 'S') return <line key={i} x1={x} y1={y + CELL_SIZE} x2={x + CELL_SIZE} y2={y + CELL_SIZE} stroke={options.lineColor} strokeWidth={options.wallThickness} />;
-          if (wall.dir === 'E') return <line key={i} x1={x + CELL_SIZE} y1={y} x2={x + CELL_SIZE} y2={y + CELL_SIZE} stroke={options.lineColor} strokeWidth={options.wallThickness} />;
-          if (wall.dir === 'W') return <line key={i} x1={x} y1={y} x2={x} y2={y + CELL_SIZE} stroke={options.lineColor} strokeWidth={options.wallThickness} />;
+          const wallColor = isHighContrast ? svgLineColor : options.lineColor;
+          if (wall.dir === 'N') return <line key={i} x1={x} y1={y} x2={x2} y2={y2} stroke={wallColor} strokeWidth={options.wallThickness} />;
+          if (wall.dir === 'S') return <line key={i} x1={x} y1={y + CELL_SIZE} x2={x + CELL_SIZE} y2={y + CELL_SIZE} stroke={wallColor} strokeWidth={options.wallThickness} />;
+          if (wall.dir === 'E') return <line key={i} x1={x + CELL_SIZE} y1={y} x2={x + CELL_SIZE} y2={y + CELL_SIZE} stroke={wallColor} strokeWidth={options.wallThickness} />;
+          if (wall.dir === 'W') return <line key={i} x1={x} y1={y} x2={x} y2={y + CELL_SIZE} stroke={wallColor} strokeWidth={options.wallThickness} />;
           return null;
         })}
         {/* Draw solution path if enabled */}

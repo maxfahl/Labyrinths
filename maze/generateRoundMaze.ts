@@ -110,4 +110,8 @@ export function generateRoundMazeWithPrims(options: MazeOptions): MazeData {
     end: { x: end.sector, y: end.ring },
     solution: solution.map(p => ({ x: p.sector, y: p.ring })),
   };
+}
+
+export function generateRoundMaze(options: MazeOptions): MazeData {
+  return generateRoundMazeWithPrims(options);
 } 

@@ -1,4 +1,4 @@
-import { generateRoundMaze } from './generateSquareMaze';
+import { generateRoundMaze } from '../maze/generateRoundMaze';
 describe('generateRoundMaze', () => {
   it('generates a round maze with correct dimensions', () => {
     const maze = generateRoundMaze({
