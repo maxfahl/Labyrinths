@@ -1,6 +1,7 @@
 /* eslint-env jest */
+import { expect, test } from '@jest/globals';
 import { render, screen } from '@testing-library/react';
-import App from '../App.jsx';
+import App from '../App.tsx';
 
 test('renders controls and preview', () => {
   render(<App />);

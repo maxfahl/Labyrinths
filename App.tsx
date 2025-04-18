@@ -19,9 +19,10 @@ export interface MazeOptions {
   animateGeneration: boolean;
   highContrast: boolean;
   fontSize: number;
+  svgPadding: number;
 }
 
-const defaultOptions: MazeOptions = {
+export const defaultOptions: MazeOptions = {
   mazeType: 'square',
   width: 20,
   height: 20,
@@ -38,6 +39,7 @@ const defaultOptions: MazeOptions = {
   animateGeneration: false,
   highContrast: false,
   fontSize: 16,
+  svgPadding: 20,
 };
 
 function App() {

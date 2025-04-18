@@ -25,14 +25,15 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
   });
   const w = options.width * CELL_SIZE;
   const h = options.height * CELL_SIZE;
+  const padding = options.svgPadding ?? 20;
   return (
     <section className="flex-1 min-w-0 h-full flex flex-col items-center justify-start bg-none border-none shadow-none p-0">
       <h2>Maze Preview</h2>
-      <svg width={w} height={h} style={{ background: options.bgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }}>
+      <svg width={w + 2 * padding} height={h + 2 * padding} style={{ background: options.bgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }}>
         {/* Draw maze walls */}
         {maze.walls.map((wall, i) => {
-          const x = wall.x * CELL_SIZE;
-          const y = wall.y * CELL_SIZE;
+          const x = wall.x * CELL_SIZE + padding;
+          const y = wall.y * CELL_SIZE + padding;
           let x2 = x, y2 = y;
           switch (wall.dir) {
             case 'N': x2 = x + CELL_SIZE; y2 = y; break;
@@ -52,7 +53,7 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
             fill="none"
             stroke="red"
             strokeWidth={options.wallThickness}
-            points={maze.solution.map(pos => `${pos.x * CELL_SIZE + CELL_SIZE / 2},${pos.y * CELL_SIZE + CELL_SIZE / 2}`).join(' ')}
+            points={maze.solution.map(pos => `${pos.x * CELL_SIZE + CELL_SIZE / 2 + padding},${pos.y * CELL_SIZE + CELL_SIZE / 2 + padding}`).join(' ')}
           />
         )}
       </svg>

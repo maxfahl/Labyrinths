@@ -1,11 +1,21 @@
 /* eslint-env jest */
 import { describe, expect, test } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react';
-import ControlsPanel from '../components/ControlsPanel';
+import React from 'react';
+import { defaultOptions } from '../App';
+import ControlsPanel from '../components/ControlsPanel.tsx';
+
+function renderPanelWithState(initialOptions = defaultOptions) {
+  function Wrapper() {
+    const [options, setOptions] = React.useState(initialOptions);
+    return <ControlsPanel options={options} setOptions={setOptions} />;
+  }
+  return render(<Wrapper />);
+}
 
 describe('ControlsPanel controls', () => {
   test('renders and updates maze type select', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const select = screen.getByLabelText(/Type/i);
     expect(select).toBeInTheDocument();
     // Open select and choose a different type
@@ -16,7 +26,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and updates width and height inputs', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const widthInput = screen.getByLabelText(/Width/i);
     const heightInput = screen.getByLabelText(/Height/i);
     expect(widthInput).toBeInTheDocument();
@@ -28,14 +38,14 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders complexity slider', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const sliders = screen.getAllByRole('slider');
     expect(sliders[0]).toBeInTheDocument();
     expect(sliders[0]).toHaveAttribute('aria-valuenow', '50');
   });
 
   test('renders and updates line color input', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const lineColorInput = screen.getByLabelText(/Line Color/i);
     expect(lineColorInput).toBeInTheDocument();
     fireEvent.change(lineColorInput, { target: { value: '#123456' } });
@@ -43,7 +53,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and updates background color input', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const bgColorInput = screen.getByLabelText(/Background Color/i);
     expect(bgColorInput).toBeInTheDocument();
     fireEvent.change(bgColorInput, { target: { value: '#abcdef' } });
@@ -51,14 +61,14 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders wall thickness slider', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const sliders = screen.getAllByRole('slider');
     expect(sliders[1]).toBeInTheDocument();
     expect(sliders[1]).toHaveAttribute('aria-valuenow', '4');
   });
 
   test('renders and updates seed input', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const seedInput = screen.getByLabelText(/Seed/i);
     expect(seedInput).toBeInTheDocument();
     fireEvent.change(seedInput, { target: { value: 'test-seed-123' } });
@@ -66,7 +76,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and updates start/end position selector', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const startSelect = screen.getByLabelText(/Start Position/i);
     const endSelect = screen.getByLabelText(/End Position/i);
     expect(startSelect).toBeInTheDocument();
@@ -78,7 +88,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and updates maze theme selector', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const themeSelect = screen.getByLabelText(/Maze Theme/i);
     expect(themeSelect).toBeInTheDocument();
     fireEvent.change(themeSelect, { target: { value: 'print' } });
@@ -86,7 +96,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and toggles solution path checkbox', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const checkbox = screen.getByLabelText(/Show Solution/i);
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).not.toBeChecked();
@@ -95,7 +105,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and toggles grid overlay checkbox', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const checkbox = screen.getByLabelText(/Show Grid/i);
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).not.toBeChecked();
@@ -104,7 +114,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and toggles animated generation checkbox', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const checkbox = screen.getByLabelText(/Animate Generation/i);
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).not.toBeChecked();
@@ -113,7 +123,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and toggles high contrast checkbox', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const checkbox = screen.getByLabelText(/High Contrast/i);
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).not.toBeChecked();
@@ -122,7 +132,7 @@ describe('ControlsPanel controls', () => {
   });
 
   test('renders and updates font size input', () => {
-    render(<ControlsPanel />);
+    renderPanelWithState();
     const fontSizeInput = screen.getByLabelText(/Font Size/i);
     expect(fontSizeInput).toBeInTheDocument();
     fireEvent.change(fontSizeInput, { target: { value: 24 } });
