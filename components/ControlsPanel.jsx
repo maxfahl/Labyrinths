@@ -48,13 +48,18 @@ function ControlsPanel() {
   const [startPosition, setStartPosition] = useState('top-left');
   const [endPosition, setEndPosition] = useState('bottom-right');
   const [mazeTheme, setMazeTheme] = useState('custom');
+  const [showSolution, setShowSolution] = useState(false);
+  const [showGrid, setShowGrid] = useState(false);
+  const [animateGeneration, setAnimateGeneration] = useState(false);
+  const [highContrast, setHighContrast] = useState(false);
+  const [fontSize, setFontSize] = useState(16);
 
   return (
     <Card className="w-full h-full flex flex-col">
       <CardHeader>
         <CardTitle>Controls</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col gap-6">
+      <CardContent className="flex-1 flex flex-col gap-6 overflow-auto max-h-[80vh] scrollbar-none" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="flex flex-col gap-2">
           <Label htmlFor="maze-type">Type</Label>
           <Select value={mazeType} onValueChange={setMazeType}>
@@ -191,6 +196,68 @@ function ControlsPanel() {
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
           </select>
+        </div>
+        {/* Solution Path Toggle */}
+        <div className="flex items-center gap-2">
+          <input
+            id="show-solution"
+            type="checkbox"
+            checked={showSolution}
+            onChange={e => setShowSolution(e.target.checked)}
+            aria-label="Show Solution"
+            className="accent-primary w-5 h-5"
+          />
+          <Label htmlFor="show-solution">Show Solution</Label>
+        </div>
+        {/* Grid Overlay Toggle */}
+        <div className="flex items-center gap-2">
+          <input
+            id="show-grid"
+            type="checkbox"
+            checked={showGrid}
+            onChange={e => setShowGrid(e.target.checked)}
+            aria-label="Show Grid"
+            className="accent-primary w-5 h-5"
+          />
+          <Label htmlFor="show-grid">Show Grid</Label>
+        </div>
+        {/* Animated Generation Toggle */}
+        <div className="flex items-center gap-2">
+          <input
+            id="animate-generation"
+            type="checkbox"
+            checked={animateGeneration}
+            onChange={e => setAnimateGeneration(e.target.checked)}
+            aria-label="Animate Generation"
+            className="accent-primary w-5 h-5"
+          />
+          <Label htmlFor="animate-generation">Animate Generation</Label>
+        </div>
+        {/* Accessibility: High Contrast Toggle */}
+        <div className="flex items-center gap-2">
+          <input
+            id="high-contrast"
+            type="checkbox"
+            checked={highContrast}
+            onChange={e => setHighContrast(e.target.checked)}
+            aria-label="High Contrast"
+            className="accent-primary w-5 h-5"
+          />
+          <Label htmlFor="high-contrast">High Contrast</Label>
+        </div>
+        {/* Accessibility: Font Size Input */}
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="font-size">Font Size</Label>
+          <Input
+            id="font-size"
+            type="number"
+            min={10}
+            max={48}
+            value={fontSize}
+            onChange={e => setFontSize(Number(e.target.value))}
+            aria-label="Font Size"
+            className="w-24"
+          />
         </div>
       </CardContent>
     </Card>

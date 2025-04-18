@@ -67,4 +67,38 @@ test('homepage loads and shows controls and preview', async ({ page }) => {
   await expect(themeSelect).toBeVisible();
   await themeSelect.selectOption('print');
   await expect(themeSelect).toHaveValue('print');
+
+  // Solution path toggle
+  const solutionToggle = await page.getByLabel('Show Solution');
+  await expect(solutionToggle).toBeVisible();
+  await expect(solutionToggle).not.toBeChecked();
+  await solutionToggle.check();
+  await expect(solutionToggle).toBeChecked();
+
+  // Grid overlay toggle
+  const gridToggle = await page.getByLabel('Show Grid');
+  await expect(gridToggle).toBeVisible();
+  await expect(gridToggle).not.toBeChecked();
+  await gridToggle.check();
+  await expect(gridToggle).toBeChecked();
+
+  // Animated generation toggle
+  const animToggle = await page.getByLabel('Animate Generation');
+  await expect(animToggle).toBeVisible();
+  await expect(animToggle).not.toBeChecked();
+  await animToggle.check();
+  await expect(animToggle).toBeChecked();
+
+  // High-contrast mode toggle
+  const contrastToggle = await page.getByLabel('High Contrast');
+  await expect(contrastToggle).toBeVisible();
+  await expect(contrastToggle).not.toBeChecked();
+  await contrastToggle.check();
+  await expect(contrastToggle).toBeChecked();
+
+  // Font size input
+  const fontSizeInput = await page.getByLabel('Font Size');
+  await expect(fontSizeInput).toBeVisible();
+  await fontSizeInput.fill('24');
+  await expect(fontSizeInput).toHaveValue('24');
 }); 

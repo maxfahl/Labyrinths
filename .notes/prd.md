@@ -58,8 +58,8 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Add seed input
 - [x] Add start/end position selector
 - [x] Add maze theme selector (custom, print, predefined)
-- [ ] Add solution path toggle, grid overlay, animated generation
-- [ ] Add accessibility options (high-contrast, font size)
+- [x] Add solution path toggle, grid overlay, animated generation
+- [x] Add accessibility options (high-contrast, font size)
 - [ ] Add/expand Jest tests for new controls
 
 ### Phase 3: Maze Generation Logic

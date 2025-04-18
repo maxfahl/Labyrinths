@@ -84,4 +84,48 @@ describe('ControlsPanel controls', () => {
     fireEvent.change(themeSelect, { target: { value: 'print' } });
     expect(themeSelect).toHaveValue('print');
   });
+
+  test('renders and toggles solution path', () => {
+    render(<ControlsPanel />);
+    const solutionToggle = screen.getByLabelText(/Show Solution/i);
+    expect(solutionToggle).toBeInTheDocument();
+    expect(solutionToggle).not.toBeChecked();
+    fireEvent.click(solutionToggle);
+    expect(solutionToggle).toBeChecked();
+  });
+
+  test('renders and toggles grid overlay', () => {
+    render(<ControlsPanel />);
+    const gridToggle = screen.getByLabelText(/Show Grid/i);
+    expect(gridToggle).toBeInTheDocument();
+    expect(gridToggle).not.toBeChecked();
+    fireEvent.click(gridToggle);
+    expect(gridToggle).toBeChecked();
+  });
+
+  test('renders and toggles animated generation', () => {
+    render(<ControlsPanel />);
+    const animToggle = screen.getByLabelText(/Animate Generation/i);
+    expect(animToggle).toBeInTheDocument();
+    expect(animToggle).not.toBeChecked();
+    fireEvent.click(animToggle);
+    expect(animToggle).toBeChecked();
+  });
+
+  test('renders and updates high-contrast mode', () => {
+    render(<ControlsPanel />);
+    const contrastToggle = screen.getByLabelText(/High Contrast/i);
+    expect(contrastToggle).toBeInTheDocument();
+    expect(contrastToggle).not.toBeChecked();
+    fireEvent.click(contrastToggle);
+    expect(contrastToggle).toBeChecked();
+  });
+
+  test('renders and updates font size input', () => {
+    render(<ControlsPanel />);
+    const fontSizeInput = screen.getByLabelText(/Font Size/i);
+    expect(fontSizeInput).toBeInTheDocument();
+    fireEvent.change(fontSizeInput, { target: { value: 24 } });
+    expect(fontSizeInput).toHaveValue(24);
+  });
 }); 
