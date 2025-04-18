@@ -29,6 +29,10 @@ const START_END_POSITIONS = [
   { value: 'top-right', label: 'Top Right' },
   { value: 'bottom-left', label: 'Bottom Left' },
   { value: 'bottom-right', label: 'Bottom Right' },
+  { value: 'top', label: 'Top Edge' },
+  { value: 'right', label: 'Right Edge' },
+  { value: 'bottom', label: 'Bottom Edge' },
+  { value: 'left', label: 'Left Edge' },
   { value: 'random', label: 'Random' },
   { value: 'custom', label: 'Custom' },
 ];

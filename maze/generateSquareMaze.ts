@@ -1,3 +1,4 @@
+// @ts-ignore
 import seedrandom from 'seedrandom';
 
 export interface MazeOptions {
@@ -11,7 +12,7 @@ export interface MazeOptions {
 }
 
 export interface MazeCell {
-  visited: boolean;
+  visited?: boolean;
   walls: { N: boolean; S: boolean; E: boolean; W: boolean };
 }
 
@@ -51,8 +52,17 @@ export function generateSquareMaze(options: MazeOptions): MazeData {
       walls: { N: true, S: true, E: true, W: true },
     }))
   );
-  const start = getPosition(startPosition, width, height);
-  const end = getPosition(endPosition, width, height);
+  // Pick start and end positions
+  let start = getPosition(startPosition, width, height);
+  let end = getPosition(endPosition, width, height, { avoid: start });
+  // If start and end are still the same, pick a different end
+  if (start.x === end.x && start.y === end.y) {
+    if (endPosition === 'top') end = getPosition('bottom', width, height, { avoid: start });
+    else if (endPosition === 'bottom') end = getPosition('top', width, height, { avoid: start });
+    else if (endPosition === 'left') end = getPosition('right', width, height, { avoid: start });
+    else if (endPosition === 'right') end = getPosition('left', width, height, { avoid: start });
+    else end = { x: (start.x + 1) % width, y: start.y };
+  }
   // DFS stack
   const stack: MazePosition[] = [start];
   grid[start.y][start.x].visited = true;
@@ -87,6 +97,16 @@ export function generateSquareMaze(options: MazeOptions): MazeData {
       stack.pop();
     }
   }
+  // Remove wall at start position for entrance
+  if (start.x === 0) grid[start.y][start.x].walls.W = false;
+  if (start.x === width - 1) grid[start.y][start.x].walls.E = false;
+  if (start.y === 0) grid[start.y][start.x].walls.N = false;
+  if (start.y === height - 1) grid[start.y][start.x].walls.S = false;
+  // Remove wall at end position for exit
+  if (end.x === 0) grid[end.y][end.x].walls.W = false;
+  if (end.x === width - 1) grid[end.y][end.x].walls.E = false;
+  if (end.y === 0) grid[end.y][end.x].walls.N = false;
+  if (end.y === height - 1) grid[end.y][end.x].walls.S = false;
   // Collect walls for rendering
   const walls: MazeWall[] = [];
   for (let y = 0; y < height; y++) {
@@ -113,12 +133,36 @@ export function generateSquareMaze(options: MazeOptions): MazeData {
   return { grid, walls, start, end, solution };
 }
 
-function getPosition(pos: string, width: number, height: number): MazePosition {
-  switch (pos) {
-    case 'top-left': return { x: 0, y: 0 };
-    case 'top-right': return { x: width - 1, y: 0 };
-    case 'bottom-left': return { x: 0, y: height - 1 };
-    case 'bottom-right': return { x: width - 1, y: height - 1 };
-    default: return { x: 0, y: 0 };
+function getPosition(pos: string, width: number, height: number, other?: { avoid?: { x: number, y: number } }): MazePosition {
+  const rng = seedrandom();
+  if (pos === 'top-left') return { x: 0, y: 0 };
+  if (pos === 'top-right') return { x: width - 1, y: 0 };
+  if (pos === 'bottom-left') return { x: 0, y: height - 1 };
+  if (pos === 'bottom-right') return { x: width - 1, y: height - 1 };
+  if (pos === 'top') {
+    let x = Math.floor(rng() * width);
+    let y = 0;
+    if (other?.avoid && x === other.avoid.x && y === other.avoid.y) x = (x + 1) % width;
+    return { x, y };
   }
+  if (pos === 'bottom') {
+    let x = Math.floor(rng() * width);
+    let y = height - 1;
+    if (other?.avoid && x === other.avoid.x && y === other.avoid.y) x = (x + 1) % width;
+    return { x, y };
+  }
+  if (pos === 'left') {
+    let x = 0;
+    let y = Math.floor(rng() * height);
+    if (other?.avoid && x === other.avoid.x && y === other.avoid.y) y = (y + 1) % height;
+    return { x, y };
+  }
+  if (pos === 'right') {
+    let x = width - 1;
+    let y = Math.floor(rng() * height);
+    if (other?.avoid && x === other.avoid.x && y === other.avoid.y) y = (y + 1) % height;
+    return { x, y };
+  }
+  // fallback
+  return { x: 0, y: 0 };
 } 
