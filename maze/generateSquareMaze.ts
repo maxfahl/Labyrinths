@@ -134,6 +134,25 @@ export function generateSquareMaze(options: MazeOptions): MazeData {
 }
 
 function getPosition(pos: string, width: number, height: number, other?: { avoid?: { x: number, y: number } }): MazePosition {
+  if (pos === 'random') {
+    // Pick a random edge cell
+    const edges = [];
+    for (let i = 0; i < width; i++) {
+      edges.push({ x: i, y: 0 }); // top
+      edges.push({ x: i, y: height - 1 }); // bottom
+    }
+    for (let j = 1; j < height - 1; j++) {
+      edges.push({ x: 0, y: j }); // left
+      edges.push({ x: width - 1, y: j }); // right
+    }
+    // Remove avoid cell if present
+    let candidates = edges;
+    if (other?.avoid) {
+      candidates = edges.filter(e => e.x !== other.avoid!.x || e.y !== other.avoid!.y);
+    }
+    const idx = Math.floor(Math.random() * candidates.length);
+    return candidates[idx];
+  }
   const rng = seedrandom();
   if (pos === 'top-left') return { x: 0, y: 0 };
   if (pos === 'top-right') return { x: width - 1, y: 0 };

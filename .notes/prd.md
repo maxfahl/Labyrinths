@@ -63,7 +63,7 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Add/expand Jest tests for new controls
 
 ### Phase 3: Maze Generation Logic
-- [ ] Implement square maze generation
+- [x] Implement square maze generation
 - [ ] Implement round maze generation
 - [ ] Implement squiggly maze generation
 - [ ] Implement spaghetti maze generation
@@ -122,4 +122,4 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ## Progress Notes
 - Line color, background color, and wall thickness controls implemented in ControlsPanel.jsx and tested (Jest, Playwright E2E).
-- All core maze controls (including solution path, grid overlay, animated generation, high-contrast, font size) now have Jest unit tests and E2E coverage. Phase 2 complete. 
+- Implemented square maze generation logic with unit and E2E tests passing. Phase 3 square generation complete; starting round maze generation. 
