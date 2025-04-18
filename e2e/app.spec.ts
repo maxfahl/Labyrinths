@@ -45,4 +45,26 @@ test('homepage loads and shows controls and preview', async ({ page }) => {
   // Wall thickness slider
   const wallSlider = page.getByRole('slider', { name: 'Wall Thickness' });
   await expect(wallSlider).toBeVisible();
+
+  // Seed input
+  const seedInput = await page.getByLabel('Seed');
+  await expect(seedInput).toBeVisible();
+  await seedInput.fill('test-seed-123');
+  await expect(seedInput).toHaveValue('test-seed-123');
+
+  // Start/End position selectors
+  const startSelect = await page.getByLabel('Start Position');
+  const endSelect = await page.getByLabel('End Position');
+  await expect(startSelect).toBeVisible();
+  await expect(endSelect).toBeVisible();
+  await startSelect.selectOption('top-left');
+  await endSelect.selectOption('bottom-right');
+  await expect(startSelect).toHaveValue('top-left');
+  await expect(endSelect).toHaveValue('bottom-right');
+
+  // Maze theme selector
+  const themeSelect = await page.getByLabel('Maze Theme');
+  await expect(themeSelect).toBeVisible();
+  await themeSelect.selectOption('print');
+  await expect(themeSelect).toHaveValue('print');
 }); 

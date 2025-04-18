@@ -1,7 +1,7 @@
 # Cursor Project Rules for Labyrinth Generator
 
 - Always check .notes/prd.md for the current implementation phase and its tasks before starting work.
-- Work on one phase at a time, completing and testing all tasks in the current phase before moving to the next.
+- Work on one phase at a time, create tests (both unit and E2E) and make sure they pass before moving to the next.
 - Use ShadCN UI components and Tailwind CSS v4 for all UI elements, styling and layout.
 - Use Jest for unit/component tests and Playwright for E2E tests. Add or update tests as features are implemented.
 - Keep code modular: use separate files for components, logic, and styles.

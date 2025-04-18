@@ -56,4 +56,32 @@ describe('ControlsPanel controls', () => {
     expect(sliders[1]).toBeInTheDocument();
     expect(sliders[1]).toHaveAttribute('aria-valuenow', '4');
   });
+
+  test('renders and updates seed input', () => {
+    render(<ControlsPanel />);
+    const seedInput = screen.getByLabelText(/Seed/i);
+    expect(seedInput).toBeInTheDocument();
+    fireEvent.change(seedInput, { target: { value: 'test-seed-123' } });
+    expect(seedInput).toHaveValue('test-seed-123');
+  });
+
+  test('renders and updates start/end position selector', () => {
+    render(<ControlsPanel />);
+    const startSelect = screen.getByLabelText(/Start Position/i);
+    const endSelect = screen.getByLabelText(/End Position/i);
+    expect(startSelect).toBeInTheDocument();
+    expect(endSelect).toBeInTheDocument();
+    fireEvent.change(startSelect, { target: { value: 'top-left' } });
+    fireEvent.change(endSelect, { target: { value: 'bottom-right' } });
+    expect(startSelect).toHaveValue('top-left');
+    expect(endSelect).toHaveValue('bottom-right');
+  });
+
+  test('renders and updates maze theme selector', () => {
+    render(<ControlsPanel />);
+    const themeSelect = screen.getByLabelText(/Maze Theme/i);
+    expect(themeSelect).toBeInTheDocument();
+    fireEvent.change(themeSelect, { target: { value: 'print' } });
+    expect(themeSelect).toHaveValue('print');
+  });
 }); 

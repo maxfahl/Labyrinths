@@ -19,6 +19,23 @@ const MAZE_TYPES = [
   { value: 'spaghetti', label: 'Spaghetti' },
 ];
 
+const START_END_POSITIONS = [
+  { value: 'top-left', label: 'Top Left' },
+  { value: 'top-right', label: 'Top Right' },
+  { value: 'bottom-left', label: 'Bottom Left' },
+  { value: 'bottom-right', label: 'Bottom Right' },
+  { value: 'random', label: 'Random' },
+  { value: 'custom', label: 'Custom' },
+];
+
+const MAZE_THEMES = [
+  { value: 'custom', label: 'Custom' },
+  { value: 'print', label: 'Print (B&W)' },
+  { value: 'forest', label: 'Forest' },
+  { value: 'ocean', label: 'Ocean' },
+  { value: 'desert', label: 'Desert' },
+];
+
 function ControlsPanel() {
   const [mazeType, setMazeType] = useState('square');
   const [width, setWidth] = useState(600);
@@ -27,6 +44,10 @@ function ControlsPanel() {
   const [lineColor, setLineColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#ffffff');
   const [wallThickness, setWallThickness] = useState(4);
+  const [seed, setSeed] = useState('');
+  const [startPosition, setStartPosition] = useState('top-left');
+  const [endPosition, setEndPosition] = useState('bottom-right');
+  const [mazeTheme, setMazeTheme] = useState('custom');
 
   return (
     <Card className="w-full h-full flex flex-col">
@@ -114,6 +135,62 @@ function ControlsPanel() {
             onValueChange={([val]) => setWallThickness(val)}
             thumbProps={{ 'aria-label': 'Wall Thickness' }}
           />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="seed">Seed</Label>
+          <Input
+            id="seed"
+            type="text"
+            value={seed}
+            onChange={e => setSeed(e.target.value)}
+            aria-label="Seed"
+            placeholder="Enter seed (optional)"
+            className="w-full"
+          />
+        </div>
+        <div className="flex flex-col md:flex-row gap-2">
+          <div className="flex flex-col gap-2 flex-1">
+            <Label htmlFor="start-position">Start Position</Label>
+            <select
+              id="start-position"
+              aria-label="Start Position"
+              value={startPosition}
+              onChange={e => setStartPosition(e.target.value)}
+              className="border rounded px-2 py-1"
+            >
+              {START_END_POSITIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-2 flex-1">
+            <Label htmlFor="end-position">End Position</Label>
+            <select
+              id="end-position"
+              aria-label="End Position"
+              value={endPosition}
+              onChange={e => setEndPosition(e.target.value)}
+              className="border rounded px-2 py-1"
+            >
+              {START_END_POSITIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="maze-theme">Maze Theme</Label>
+          <select
+            id="maze-theme"
+            aria-label="Maze Theme"
+            value={mazeTheme}
+            onChange={e => setMazeTheme(e.target.value)}
+            className="border rounded px-2 py-1"
+          >
+            {MAZE_THEMES.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
         </div>
       </CardContent>
     </Card>

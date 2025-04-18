@@ -55,9 +55,9 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ### Phase 2: Core Maze Controls
 - [x] Add controls for line color, background color, wall thickness
-- [ ] Add seed input
-- [ ] Add start/end position selector
-- [ ] Add maze theme selector (custom, print, predefined)
+- [x] Add seed input
+- [x] Add start/end position selector
+- [x] Add maze theme selector (custom, print, predefined)
 - [ ] Add solution path toggle, grid overlay, animated generation
 - [ ] Add accessibility options (high-contrast, font size)
 - [ ] Add/expand Jest tests for new controls
