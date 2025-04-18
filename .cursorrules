@@ -1,0 +1,12 @@
+# Cursor Project Rules for Labyrinth Generator
+
+- Always check .notes/prd.md for the current implementation phase and its tasks before starting work.
+- Work on one phase at a time, completing and testing all tasks in the current phase before moving to the next.
+- Use ShadCN UI components and Tailwind CSS v4 for all UI elements, styling and layout.
+- Use Jest for unit/component tests and Playwright for E2E tests. Add or update tests as features are implemented.
+- Keep code modular: use separate files for components, logic, and styles.
+- Ensure accessibility (labels, keyboard navigation, color contrast) and mobile responsiveness in all UI work.
+- Render mazes as SVG for scalability and export features.
+- Use local storage for persistence of maze history and settings.
+- After each major feature or phase, update .notes/prd.md to reflect progress.
+- If unsure, ask for clarification or refer to the PRD and previous implementation notes.
