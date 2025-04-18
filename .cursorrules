@@ -12,3 +12,4 @@
 - Don't explain how to do things, just do it.
 - Ensure Test-Driven Development (TDD): write tests before implementing new features and maintain green build at every step.
 - After every code change, run `npm test` and `npm run test:e2e` to ensure tests pass and keep the build green.
+- All code files must use TypeScript (.ts/.tsx) unless there is a specific reason not to.

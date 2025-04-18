@@ -60,7 +60,7 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Add maze theme selector (custom, print, predefined)
 - [x] Add solution path toggle, grid overlay, animated generation
 - [x] Add accessibility options (high-contrast, font size)
-- [ ] Add/expand Jest tests for new controls
+- [x] Add/expand Jest tests for new controls
 
 ### Phase 3: Maze Generation Logic
 - [ ] Implement square maze generation
@@ -121,4 +121,5 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
   - Add E2E tests for user flows after implementing core features. 
 
 ## Progress Notes
-- Line color, background color, and wall thickness controls implemented in ControlsPanel.jsx and tested (Jest, Playwright E2E). 
+- Line color, background color, and wall thickness controls implemented in ControlsPanel.jsx and tested (Jest, Playwright E2E).
+- All core maze controls (including solution path, grid overlay, animated generation, high-contrast, font size) now have Jest unit tests and E2E coverage. Phase 2 complete. 

@@ -85,40 +85,40 @@ describe('ControlsPanel controls', () => {
     expect(themeSelect).toHaveValue('print');
   });
 
-  test('renders and toggles solution path', () => {
+  test('renders and toggles solution path checkbox', () => {
     render(<ControlsPanel />);
-    const solutionToggle = screen.getByLabelText(/Show Solution/i);
-    expect(solutionToggle).toBeInTheDocument();
-    expect(solutionToggle).not.toBeChecked();
-    fireEvent.click(solutionToggle);
-    expect(solutionToggle).toBeChecked();
+    const checkbox = screen.getByLabelText(/Show Solution/i);
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).not.toBeChecked();
+    fireEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
-  test('renders and toggles grid overlay', () => {
+  test('renders and toggles grid overlay checkbox', () => {
     render(<ControlsPanel />);
-    const gridToggle = screen.getByLabelText(/Show Grid/i);
-    expect(gridToggle).toBeInTheDocument();
-    expect(gridToggle).not.toBeChecked();
-    fireEvent.click(gridToggle);
-    expect(gridToggle).toBeChecked();
+    const checkbox = screen.getByLabelText(/Show Grid/i);
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).not.toBeChecked();
+    fireEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
-  test('renders and toggles animated generation', () => {
+  test('renders and toggles animated generation checkbox', () => {
     render(<ControlsPanel />);
-    const animToggle = screen.getByLabelText(/Animate Generation/i);
-    expect(animToggle).toBeInTheDocument();
-    expect(animToggle).not.toBeChecked();
-    fireEvent.click(animToggle);
-    expect(animToggle).toBeChecked();
+    const checkbox = screen.getByLabelText(/Animate Generation/i);
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).not.toBeChecked();
+    fireEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
-  test('renders and updates high-contrast mode', () => {
+  test('renders and toggles high contrast checkbox', () => {
     render(<ControlsPanel />);
-    const contrastToggle = screen.getByLabelText(/High Contrast/i);
-    expect(contrastToggle).toBeInTheDocument();
-    expect(contrastToggle).not.toBeChecked();
-    fireEvent.click(contrastToggle);
-    expect(contrastToggle).toBeChecked();
+    const checkbox = screen.getByLabelText(/High Contrast/i);
+    expect(checkbox).toBeInTheDocument();
+    expect(checkbox).not.toBeChecked();
+    fireEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
   });
 
   test('renders and updates font size input', () => {

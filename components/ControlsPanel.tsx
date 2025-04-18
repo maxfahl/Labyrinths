@@ -10,7 +10,12 @@ import
     SelectValue
   } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { useState } from 'react';
+import { MazeOptions } from "../App";
+
+interface ControlsPanelProps {
+  options: MazeOptions;
+  setOptions: (opts: MazeOptions) => void;
+}
 
 const MAZE_TYPES = [
   { value: 'square', label: 'Square' },
@@ -36,24 +41,7 @@ const MAZE_THEMES = [
   { value: 'desert', label: 'Desert' },
 ];
 
-function ControlsPanel({ options, setOptions }) {
-  const [mazeType, setMazeType] = useState('square');
-  const [width, setWidth] = useState(600);
-  const [height, setHeight] = useState(600);
-  const [complexity, setComplexity] = useState(50);
-  const [lineColor, setLineColor] = useState('#000000');
-  const [bgColor, setBgColor] = useState('#ffffff');
-  const [wallThickness, setWallThickness] = useState(4);
-  const [seed, setSeed] = useState('');
-  const [startPosition, setStartPosition] = useState('top-left');
-  const [endPosition, setEndPosition] = useState('bottom-right');
-  const [mazeTheme, setMazeTheme] = useState('custom');
-  const [showSolution, setShowSolution] = useState(false);
-  const [showGrid, setShowGrid] = useState(false);
-  const [animateGeneration, setAnimateGeneration] = useState(false);
-  const [highContrast, setHighContrast] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
-
+function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
   return (
     <Card className="w-full h-full flex flex-col">
       <CardHeader>
@@ -62,7 +50,7 @@ function ControlsPanel({ options, setOptions }) {
       <CardContent className="flex-1 flex flex-col gap-6 overflow-auto max-h-[80vh] scrollbar-none" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="flex flex-col gap-2">
           <Label htmlFor="maze-type">Type</Label>
-          <Select value={mazeType} onValueChange={setMazeType}>
+          <Select value={options.mazeType} onValueChange={mazeType => setOptions({ ...options, mazeType })}>
             <SelectTrigger id="maze-type" className="w-full">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
@@ -78,33 +66,33 @@ function ControlsPanel({ options, setOptions }) {
           <div className="flex gap-2 items-center">
             <Input
               type="number"
-              min={100}
-              max={2000}
-              value={width}
-              onChange={e => setWidth(Number(e.target.value))}
+              min={5}
+              max={100}
+              value={options.width}
+              onChange={e => setOptions({ ...options, width: Number(e.target.value) })}
               className="w-20"
               aria-label="Width"
             />
             <span>x</span>
             <Input
               type="number"
-              min={100}
-              max={2000}
-              value={height}
-              onChange={e => setHeight(Number(e.target.value))}
+              min={5}
+              max={100}
+              value={options.height}
+              onChange={e => setOptions({ ...options, height: Number(e.target.value) })}
               className="w-20"
               aria-label="Height"
             />
           </div>
         </div>
         <div className="flex flex-col gap-2" role="group" aria-labelledby="complexity-label">
-          <Label id="complexity-label" htmlFor="complexity">Complexity: {complexity}</Label>
+          <Label id="complexity-label" htmlFor="complexity">Complexity: {options.complexity}</Label>
           <Slider
             id="complexity"
             min={1}
             max={100}
-            value={[complexity]}
-            onValueChange={([val]) => setComplexity(val)}
+            value={[options.complexity]}
+            onValueChange={([val]) => setOptions({ ...options, complexity: val })}
             thumbProps={{ 'aria-label': 'Complexity' }}
           />
         </div>
@@ -113,8 +101,8 @@ function ControlsPanel({ options, setOptions }) {
           <Input
             id="line-color"
             type="color"
-            value={lineColor}
-            onChange={e => setLineColor(e.target.value)}
+            value={options.lineColor}
+            onChange={e => setOptions({ ...options, lineColor: e.target.value })}
             aria-label="Line Color"
             className="w-12 h-12 p-0 border-none bg-transparent"
           />
@@ -124,20 +112,20 @@ function ControlsPanel({ options, setOptions }) {
           <Input
             id="bg-color"
             type="color"
-            value={bgColor}
-            onChange={e => setBgColor(e.target.value)}
+            value={options.bgColor}
+            onChange={e => setOptions({ ...options, bgColor: e.target.value })}
             aria-label="Background Color"
             className="w-12 h-12 p-0 border-none bg-transparent"
           />
         </div>
         <div className="flex flex-col gap-2" role="group" aria-labelledby="wall-thickness-label">
-          <Label id="wall-thickness-label" htmlFor="wall-thickness">Wall Thickness: {wallThickness}px</Label>
+          <Label id="wall-thickness-label" htmlFor="wall-thickness">Wall Thickness: {options.wallThickness}px</Label>
           <Slider
             id="wall-thickness"
             min={1}
             max={20}
-            value={[wallThickness]}
-            onValueChange={([val]) => setWallThickness(val)}
+            value={[options.wallThickness]}
+            onValueChange={([val]) => setOptions({ ...options, wallThickness: val })}
             thumbProps={{ 'aria-label': 'Wall Thickness' }}
           />
         </div>
@@ -146,8 +134,8 @@ function ControlsPanel({ options, setOptions }) {
           <Input
             id="seed"
             type="text"
-            value={seed}
-            onChange={e => setSeed(e.target.value)}
+            value={options.seed}
+            onChange={e => setOptions({ ...options, seed: e.target.value })}
             aria-label="Seed"
             placeholder="Enter seed (optional)"
             className="w-full"
@@ -159,8 +147,8 @@ function ControlsPanel({ options, setOptions }) {
             <select
               id="start-position"
               aria-label="Start Position"
-              value={startPosition}
-              onChange={e => setStartPosition(e.target.value)}
+              value={options.startPosition}
+              onChange={e => setOptions({ ...options, startPosition: e.target.value })}
               className="border rounded px-2 py-1"
             >
               {START_END_POSITIONS.map(opt => (
@@ -173,8 +161,8 @@ function ControlsPanel({ options, setOptions }) {
             <select
               id="end-position"
               aria-label="End Position"
-              value={endPosition}
-              onChange={e => setEndPosition(e.target.value)}
+              value={options.endPosition}
+              onChange={e => setOptions({ ...options, endPosition: e.target.value })}
               className="border rounded px-2 py-1"
             >
               {START_END_POSITIONS.map(opt => (
@@ -188,8 +176,8 @@ function ControlsPanel({ options, setOptions }) {
           <select
             id="maze-theme"
             aria-label="Maze Theme"
-            value={mazeTheme}
-            onChange={e => setMazeTheme(e.target.value)}
+            value={options.mazeTheme}
+            onChange={e => setOptions({ ...options, mazeTheme: e.target.value })}
             className="border rounded px-2 py-1"
           >
             {MAZE_THEMES.map(opt => (
@@ -202,8 +190,8 @@ function ControlsPanel({ options, setOptions }) {
           <input
             id="show-solution"
             type="checkbox"
-            checked={showSolution}
-            onChange={e => setShowSolution(e.target.checked)}
+            checked={options.showSolution}
+            onChange={e => setOptions({ ...options, showSolution: e.target.checked })}
             aria-label="Show Solution"
             className="accent-primary w-5 h-5"
           />
@@ -214,8 +202,8 @@ function ControlsPanel({ options, setOptions }) {
           <input
             id="show-grid"
             type="checkbox"
-            checked={showGrid}
-            onChange={e => setShowGrid(e.target.checked)}
+            checked={options.showGrid}
+            onChange={e => setOptions({ ...options, showGrid: e.target.checked })}
             aria-label="Show Grid"
             className="accent-primary w-5 h-5"
           />
@@ -226,8 +214,8 @@ function ControlsPanel({ options, setOptions }) {
           <input
             id="animate-generation"
             type="checkbox"
-            checked={animateGeneration}
-            onChange={e => setAnimateGeneration(e.target.checked)}
+            checked={options.animateGeneration}
+            onChange={e => setOptions({ ...options, animateGeneration: e.target.checked })}
             aria-label="Animate Generation"
             className="accent-primary w-5 h-5"
           />
@@ -238,8 +226,8 @@ function ControlsPanel({ options, setOptions }) {
           <input
             id="high-contrast"
             type="checkbox"
-            checked={highContrast}
-            onChange={e => setHighContrast(e.target.checked)}
+            checked={options.highContrast}
+            onChange={e => setOptions({ ...options, highContrast: e.target.checked })}
             aria-label="High Contrast"
             className="accent-primary w-5 h-5"
           />
@@ -253,8 +241,8 @@ function ControlsPanel({ options, setOptions }) {
             type="number"
             min={10}
             max={48}
-            value={fontSize}
-            onChange={e => setFontSize(Number(e.target.value))}
+            value={options.fontSize}
+            onChange={e => setOptions({ ...options, fontSize: Number(e.target.value) })}
             aria-label="Font Size"
             className="w-24"
           />
