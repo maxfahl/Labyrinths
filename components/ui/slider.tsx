@@ -1,9 +1,18 @@
-"use client"
+"use client";
 
-import * as SliderPrimitive from "@radix-ui/react-slider"
-import * as React from "react"
+import * as SliderPrimitive from "@radix-ui/react-slider";
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
+
+export interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
+  className?: string;
+  defaultValue?: number[];
+  value?: number[];
+  min?: number;
+  max?: number;
+  thumbProps?: React.ComponentPropsWithoutRef<typeof SliderPrimitive.Thumb>;
+}
 
 function Slider({
   className,
@@ -13,13 +22,16 @@ function Slider({
   max = 100,
   thumbProps = {},
   ...props
-}) {
-  const _values = React.useMemo(() =>
-    Array.isArray(value)
-      ? value
-      : Array.isArray(defaultValue)
+}: SliderProps) {
+  const _values = React.useMemo(
+    () =>
+      Array.isArray(value)
+        ? value
+        : Array.isArray(defaultValue)
         ? defaultValue
-        : [min, max], [value, defaultValue, min, max])
+        : [min, max],
+    [value, defaultValue, min, max]
+  );
 
   return (
     <SliderPrimitive.Root
@@ -32,17 +44,20 @@ function Slider({
         "relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
         className
       )}
-      {...props}>
+      {...props}
+    >
       <SliderPrimitive.Track
         data-slot="slider-track"
         className={cn(
           "bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5"
-        )}>
+        )}
+      >
         <SliderPrimitive.Range
           data-slot="slider-range"
           className={cn(
             "bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full"
-          )} />
+          )}
+        />
       </SliderPrimitive.Track>
       {Array.from({ length: _values.length }, (_, index) => (
         <SliderPrimitive.Thumb
@@ -56,4 +71,4 @@ function Slider({
   );
 }
 
-export { Slider }
+export { Slider };
