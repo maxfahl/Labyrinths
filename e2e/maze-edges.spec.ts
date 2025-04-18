@@ -19,7 +19,7 @@ test.describe('Maze edge start/end positions', () => {
         await startSelect.selectOption(start.value);
         await endSelect.selectOption(end.value);
         // Check that the SVG maze preview exists and is not empty
-        const svg = await page.locator('svg');
+        const svg = await page.getByRole('img', { name: 'Maze Preview' });
         await expect(svg).toBeVisible();
         await expect(await svg.innerHTML()).not.toEqual('');
       });

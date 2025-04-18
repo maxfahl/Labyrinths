@@ -37,6 +37,13 @@ const START_END_POSITIONS = [
   { value: 'custom', label: 'Custom' },
 ];
 
+const ROUND_START_END_POSITIONS = [
+  { value: 'center', label: 'Center' },
+  { value: 'outer', label: 'Outer Ring' },
+  { value: 'randomRing', label: 'Random Ring' },
+  { value: 'customSector', label: 'Custom Sector' },
+];
+
 const MAZE_THEMES = [
   { value: 'custom', label: 'Custom' },
   { value: 'print', label: 'Print (B&W)' },
@@ -170,10 +177,17 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
               id="start-position"
               aria-label="Start Position"
               value={options.startPosition}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptions({ ...options, startPosition: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                let newStart = e.target.value;
+                let newEnd = options.endPosition;
+                if (options.mazeType === 'round' && newStart === newEnd && (newStart === 'center' || newStart === 'outer')) {
+                  newEnd = newStart === 'center' ? 'outer' : 'center';
+                }
+                setOptions({ ...options, startPosition: newStart, endPosition: newEnd });
+              }}
               className="border rounded px-2 py-1"
             >
-              {START_END_POSITIONS.map(opt => (
+              {(options.mazeType === 'round' ? ROUND_START_END_POSITIONS : START_END_POSITIONS).map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
@@ -184,10 +198,17 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
               id="end-position"
               aria-label="End Position"
               value={options.endPosition}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptions({ ...options, endPosition: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                let newEnd = e.target.value;
+                let newStart = options.startPosition;
+                if (options.mazeType === 'round' && newEnd === newStart && (newEnd === 'center' || newEnd === 'outer')) {
+                  newStart = newEnd === 'center' ? 'outer' : 'center';
+                }
+                setOptions({ ...options, endPosition: newEnd, startPosition: newStart });
+              }}
               className="border rounded px-2 py-1"
             >
-              {START_END_POSITIONS.map(opt => (
+              {(options.mazeType === 'round' ? ROUND_START_END_POSITIONS : START_END_POSITIONS).map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
