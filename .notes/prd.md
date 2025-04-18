@@ -45,12 +45,12 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 ## Implementation Checklist
 
 ### UI/UX
-- [ ] Design main layout and controls panel
-- [ ] Implement maze preview area
+- [x] Design main layout and controls panel
+- [x] Implement maze preview area
 - [ ] Add controls for all maze parameters
 - [ ] Add color pickers and theme selector
 - [ ] Add export/download buttons
-- [ ] Add history panel for previous generations
+- [x] Add history panel for previous generations
 - [ ] Add preview thumbnails for saved mazes
 
 ### Maze Generation
@@ -88,6 +88,16 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ## Notes
 - Use React (plain or with Vite/CRA for bundling)
+- Render maze as SVG (for easy export and scaling)
+- Use local storage for persistence
+- Prioritize accessibility and mobile responsiveness
+- Use ShadCN UI components for all form controls and UI elements for a modern, accessible, and consistent design
+
+---
+
+## Implementation Notes
+- Use **Vercel** or **Netlify** for simple, free, and fast static React app hosting.
+- Use **ShadCN UI components** for all form controls and UI elements for a modern, accessible, and consistent design.
 - Render maze as SVG (for easy export and scaling)
 - Use local storage for persistence
 - Prioritize accessibility and mobile responsiveness 
