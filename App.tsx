@@ -3,7 +3,6 @@ import ControlsPanel from './components/ControlsPanel';
 import MazePreview from './components/MazePreview';
 
 export interface MazeOptions {
-  mazeType: string;
   width: number;
   height: number;
   complexity: number;
@@ -23,7 +22,6 @@ export interface MazeOptions {
 }
 
 export const defaultOptions: MazeOptions = {
-  mazeType: 'square',
   width: 20,
   height: 20,
   complexity: 50,

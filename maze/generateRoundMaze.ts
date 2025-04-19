@@ -86,7 +86,7 @@ export function generateRoundMazeWithPrims(options: MazeOptions): MazeData {
     for (const d of dirs) {
       const nr = cur.ring + d.dr;
       const ns = (cur.sector + d.ds + width) % width;
-      const dir: 'in' | 'out' | 'left' | 'right' = d.dir;
+      const dir = d.dir as 'in' | 'out' | 'left' | 'right';
       if (nr >= 0 && nr < height && !visited[nr][ns] && !grid[cur.ring][cur.sector].walls[dir]) {
         parent[nr][ns] = { ring: cur.ring, sector: cur.sector };
         visited[nr][ns] = true;

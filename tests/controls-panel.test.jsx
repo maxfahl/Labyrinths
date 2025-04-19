@@ -14,17 +14,6 @@ function renderPanelWithState(initialOptions = defaultOptions) {
 }
 
 describe('ControlsPanel controls', () => {
-  test('renders and updates maze type select', () => {
-    renderPanelWithState();
-    const select = screen.getByLabelText(/Type/i);
-    expect(select).toBeInTheDocument();
-    // Open select and choose a different type
-    fireEvent.mouseDown(select);
-    const roundOption = screen.getByText(/Round/i);
-    fireEvent.click(roundOption);
-    expect(screen.getByText(/Round/i)).toBeInTheDocument();
-  });
-
   test('renders and updates width and height inputs', () => {
     renderPanelWithState();
     const widthInput = screen.getByLabelText(/Width/i);

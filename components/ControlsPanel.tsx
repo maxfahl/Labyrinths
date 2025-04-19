@@ -1,14 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import
-  {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-  } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { MazeOptions } from "../App";
 
@@ -16,13 +8,6 @@ interface ControlsPanelProps {
   options: MazeOptions;
   setOptions: (opts: MazeOptions) => void;
 }
-
-const MAZE_TYPES = [
-  { value: 'square', label: 'Square' },
-  { value: 'round', label: 'Round' },
-  { value: 'squiggly', label: 'Squiggly' },
-  { value: 'spaghetti', label: 'Spaghetti' },
-];
 
 const START_END_POSITIONS = [
   { value: 'top-left', label: 'Top Left' },
@@ -35,13 +20,6 @@ const START_END_POSITIONS = [
   { value: 'left', label: 'Left Edge' },
   { value: 'random', label: 'Random' },
   { value: 'custom', label: 'Custom' },
-];
-
-const ROUND_START_END_POSITIONS = [
-  { value: 'center', label: 'Center' },
-  { value: 'outer', label: 'Outer Ring' },
-  { value: 'randomRing', label: 'Random Ring' },
-  { value: 'customSector', label: 'Custom Sector' },
 ];
 
 const MAZE_THEMES = [
@@ -60,39 +38,28 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
       </CardHeader>
       <CardContent className="flex-1 flex flex-col gap-6 overflow-auto max-h-[80vh] scrollbar-none" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="maze-type" className="">Type</Label>
-          <Select value={options.mazeType} onValueChange={(mazeType: string) => setOptions({ ...options, mazeType })}>
-            <SelectTrigger id="maze-type" className="w-full">
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent className="">
-              {MAZE_TYPES.map(type => (
-                <SelectItem key={type.value} value={type.value} className="">{type.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
           <Label className="">Size (px)</Label>
           <div className="flex gap-2 items-center">
+            <Label htmlFor="width" className="sr-only">Width</Label>
             <Input
+              id="width"
               type="number"
               min={5}
               max={1000}
               value={options.width}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, width: Number(e.target.value) })}
               className="w-20"
-              aria-label="Width"
             />
             <span>x</span>
+            <Label htmlFor="height" className="sr-only">Height</Label>
             <Input
+              id="height"
               type="number"
               min={5}
               max={1000}
               value={options.height}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, height: Number(e.target.value) })}
               className="w-20"
-              aria-label="Height"
             />
           </div>
         </div>
@@ -164,7 +131,7 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
             id="seed"
             type="text"
             value={options.seed}
-            onChange={e => setOptions({ ...options, seed: e.target.value })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, seed: e.target.value })}
             aria-label="Seed"
             placeholder="Enter seed (optional)"
             className="w-full"
@@ -177,17 +144,10 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
               id="start-position"
               aria-label="Start Position"
               value={options.startPosition}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                let newStart = e.target.value;
-                let newEnd = options.endPosition;
-                if (options.mazeType === 'round' && newStart === newEnd && (newStart === 'center' || newStart === 'outer')) {
-                  newEnd = newStart === 'center' ? 'outer' : 'center';
-                }
-                setOptions({ ...options, startPosition: newStart, endPosition: newEnd });
-              }}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptions({ ...options, startPosition: e.target.value })}
               className="border rounded px-2 py-1"
             >
-              {(options.mazeType === 'round' ? ROUND_START_END_POSITIONS : START_END_POSITIONS).map(opt => (
+              {START_END_POSITIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
@@ -198,17 +158,10 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
               id="end-position"
               aria-label="End Position"
               value={options.endPosition}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                let newEnd = e.target.value;
-                let newStart = options.startPosition;
-                if (options.mazeType === 'round' && newEnd === newStart && (newEnd === 'center' || newEnd === 'outer')) {
-                  newStart = newEnd === 'center' ? 'outer' : 'center';
-                }
-                setOptions({ ...options, endPosition: newEnd, startPosition: newStart });
-              }}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptions({ ...options, endPosition: e.target.value })}
               className="border rounded px-2 py-1"
             >
-              {(options.mazeType === 'round' ? ROUND_START_END_POSITIONS : START_END_POSITIONS).map(opt => (
+              {START_END_POSITIONS.map(opt => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>

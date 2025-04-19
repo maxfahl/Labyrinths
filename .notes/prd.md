@@ -64,9 +64,6 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ### Phase 3: Maze Generation Logic
 - [x] Implement square maze generation
-- [ ] Implement round maze generation
-- [ ] Implement squiggly maze generation
-- [ ] Implement spaghetti maze generation
 - [ ] Add logic for complexity, size, wall thickness, seed
 - [ ] Add logic for start/end position
 - [ ] Add Jest unit tests for maze generation
@@ -79,7 +76,7 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [ ] Add Jest/Playwright tests for export/print
 
 ### Phase 5: History & Persistence
-- [ ] Save generated mazes (settings, seed, preview image) to local storage
+- [ ] Save generated mazes with a name (settings, seed, preview image) to local storage
 - [ ] Display history with preview images
 - [ ] Allow restoring previous mazes from history
 - [ ] Add Jest/Playwright tests for history/persistence
@@ -89,6 +86,20 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [ ] Add README and usage instructions
 - [ ] Prepare and deploy to Vercel/Netlify
 - [ ] Run all tests in CI/CD pipeline
+
+### Phase 7: Additional Maze Types
+- [ ] Implement round maze generation
+  - [ ] Add/expand controls for round maze
+  - [ ] Add Jest unit tests for round maze
+  - [ ] Add E2E tests for round maze
+- [ ] Implement squiggly maze generation
+  - [ ] Add/expand controls for squiggly maze
+  - [ ] Add Jest unit tests for squiggly maze
+  - [ ] Add E2E tests for squiggly maze
+- [ ] Implement spaghetti maze generation
+  - [ ] Add/expand controls for spaghetti maze
+  - [ ] Add Jest unit tests for spaghetti maze
+  - [ ] Add E2E tests for spaghetti maze
 
 ---
 
