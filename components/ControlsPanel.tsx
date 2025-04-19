@@ -32,7 +32,7 @@ const MAZE_THEMES = [
 
 function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
   return (
-    <Card className="w-full h-full flex flex-col">
+    <Card className="w-full h-full flex flex-col bg-white text-gray-900 border shadow rounded-2xl">
       <CardHeader>
         <CardTitle>{'Controls'}</CardTitle>
       </CardHeader>
