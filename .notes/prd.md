@@ -65,7 +65,7 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Hide theme selector
 - [x] Implement export to PNG, SVG, PDF
 - [x] Implement print mode
-- [ ] Add Jest/Playwright tests for export/print
+- [x] Add Jest/Playwright tests for export/print
 
 ### Phase 5: History & Persistence
 - [ ] Save generated mazes with a name (settings, seed, preview image) to local storage
