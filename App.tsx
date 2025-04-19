@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react';
 import ControlsPanel from './components/ControlsPanel';
 import ExportButtons from './components/ExportButtons';
+import MazeHistoryList from './components/MazeHistoryList';
 import MazePreview from './components/MazePreview';
+import SaveMazeButton from './components/SaveMazeButton';
+import { deleteMaze, generateMazeId, loadMazeHistory, SavedMaze, saveMaze } from './lib/history';
 
 export interface MazeOptions {
   width: number;
@@ -33,6 +36,7 @@ export const defaultOptions: MazeOptions = {
 
 function App() {
   const [mazeOptions, setMazeOptions] = useState<MazeOptions>(defaultOptions);
+  const [history, setHistory] = useState<SavedMaze[]>(() => loadMazeHistory());
   const svgRef = useRef<SVGSVGElement>(null!);
 
   return (
@@ -43,7 +47,34 @@ function App() {
         </section>
         <section className="flex-1 min-w-0 h-full flex flex-col items-center justify-start bg-none border-none shadow-none p-0">
           <MazePreview ref={svgRef} options={mazeOptions} />
-          <ExportButtons svgRef={svgRef} />
+          <div className="flex gap-2 mt-4">
+            <ExportButtons svgRef={svgRef} />
+            <SaveMazeButton
+              svgRef={svgRef}
+              options={mazeOptions}
+              onSave={(name, options, preview) => {
+                const item: SavedMaze = {
+                  id: generateMazeId(),
+                  name,
+                  options,
+                  preview,
+                  timestamp: Date.now(),
+                };
+                const updated = saveMaze(item);
+                setHistory(updated);
+              }}
+            />
+          </div>
+          <MazeHistoryList
+            history={history}
+            onRestore={(item) => {
+              setMazeOptions(item.options);
+            }}
+            onDelete={(id) => {
+              const updated = deleteMaze(id);
+              setHistory(updated);
+            }}
+          />
         </section>
       </main>
     </div>
