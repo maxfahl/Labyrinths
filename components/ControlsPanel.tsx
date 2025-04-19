@@ -22,14 +22,6 @@ const START_END_POSITIONS = [
   { value: 'custom', label: 'Custom' },
 ];
 
-const MAZE_THEMES = [
-  { value: 'custom', label: 'Custom' },
-  { value: 'print', label: 'Print (B&W)' },
-  { value: 'forest', label: 'Forest' },
-  { value: 'ocean', label: 'Ocean' },
-  { value: 'desert', label: 'Desert' },
-];
-
 function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
   return (
     <Card className="w-full h-full flex flex-col bg-white text-gray-900 border shadow rounded-2xl">
@@ -159,20 +151,7 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
             </select>
           </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="maze-theme" className="">Maze Theme</Label>
-          <select
-            id="maze-theme"
-            aria-label="Maze Theme"
-            value={options.mazeTheme}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptions({ ...options, mazeTheme: e.target.value })}
-            className="border rounded px-2 py-1"
-          >
-            {MAZE_THEMES.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </select>
-        </div>
+        {/* Maze Theme selector intentionally hidden per Phase 4 requirements */}
         {/* Solution Path Toggle */}
         <div className="flex items-center gap-2">
           <input

@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import React, { useMemo } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import { MazeOptions } from '../App';
 import { generateSquareMaze } from '../maze/generateSquareMaze';
 
@@ -7,7 +7,7 @@ interface MazePreviewProps {
   options: MazeOptions;
 }
 
-const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
+const MazePreview = forwardRef<SVGSVGElement | null, MazePreviewProps>(({ options }, svgRef) => {
   // Memoize maze generation so toggling showSolution does not regenerate the maze
   const mazeDeps = useMemo(() => {
     const { width, height, wallThickness, seed, startPosition, endPosition } = options;
@@ -37,9 +37,12 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
 
   return (
     <Card className="w-full h-full bg-white border rounded-2xl shadow-xl flex items-center justify-center p-0 overflow-hidden">
+      {/* Accessible heading for screen readers and tests */}
+      <h2 className="sr-only" role="heading" aria-level={2}>Maze Preview</h2>
       <CardContent className="flex flex-col items-center justify-start w-full h-full p-0">
         <div className="w-full h-full flex-1 flex items-center justify-center aspect-square max-h-full max-w-full">
           <svg
+            ref={svgRef as React.Ref<SVGSVGElement>}
             viewBox={`0 0 ${options.width * 20 + 2 * (options.svgPadding ?? 20)} ${options.height * 20 + 2 * (options.svgPadding ?? 20)}`}
             width="100%"
             height="100%"
@@ -102,6 +105,8 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
       </CardContent>
     </Card>
   );
-};
+});
+
+MazePreview.displayName = 'MazePreview';
 
 export default MazePreview; 

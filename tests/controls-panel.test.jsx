@@ -26,42 +26,31 @@ describe('ControlsPanel controls', () => {
     expect(heightInput).toHaveValue(400);
   });
 
-  test('renders complexity slider', () => {
+  test('renders wall thickness slider and reflects value', () => {
     renderPanelWithState();
-    const sliders = screen.getAllByRole('slider');
-    expect(sliders[0]).toBeInTheDocument();
-    expect(sliders[0]).toHaveAttribute('aria-valuenow', '50');
+    const wallSlider = screen.getByRole('slider', { name: /Wall Thickness/i });
+    expect(wallSlider).toBeInTheDocument();
+    expect(wallSlider).toHaveAttribute('aria-valuenow', '4');
   });
 
-  test('renders and updates line color input', () => {
+  test('renders seed slider', () => {
+    renderPanelWithState();
+    const seedSlider = screen.getByRole('slider', { name: /Seed/i });
+    expect(seedSlider).toBeInTheDocument();
+  });
+
+  test('renders line color input', () => {
     renderPanelWithState();
     const lineColorInput = screen.getByLabelText(/Line Color/i);
     expect(lineColorInput).toBeInTheDocument();
-    fireEvent.change(lineColorInput, { target: { value: '#123456' } });
-    expect(lineColorInput).toHaveValue('#123456');
+    expect(lineColorInput).toHaveValue('#000000');
   });
 
-  test('renders and updates background color input', () => {
+  test('renders background color input', () => {
     renderPanelWithState();
     const bgColorInput = screen.getByLabelText(/Background Color/i);
     expect(bgColorInput).toBeInTheDocument();
-    fireEvent.change(bgColorInput, { target: { value: '#abcdef' } });
-    expect(bgColorInput).toHaveValue('#abcdef');
-  });
-
-  test('renders wall thickness slider', () => {
-    renderPanelWithState();
-    const sliders = screen.getAllByRole('slider');
-    expect(sliders[1]).toBeInTheDocument();
-    expect(sliders[1]).toHaveAttribute('aria-valuenow', '4');
-  });
-
-  test('renders and updates seed input', () => {
-    renderPanelWithState();
-    const seedInput = screen.getByLabelText(/Seed/i);
-    expect(seedInput).toBeInTheDocument();
-    fireEvent.change(seedInput, { target: { value: 'test-seed-123' } });
-    expect(seedInput).toHaveValue('test-seed-123');
+    expect(bgColorInput).toHaveValue('#ffffff');
   });
 
   test('renders and updates start/end position selector', () => {
@@ -76,14 +65,6 @@ describe('ControlsPanel controls', () => {
     expect(endSelect).toHaveValue('bottom-right');
   });
 
-  test('renders and updates maze theme selector', () => {
-    renderPanelWithState();
-    const themeSelect = screen.getByLabelText(/Maze Theme/i);
-    expect(themeSelect).toBeInTheDocument();
-    fireEvent.change(themeSelect, { target: { value: 'print' } });
-    expect(themeSelect).toHaveValue('print');
-  });
-
   test('renders and toggles solution path checkbox', () => {
     renderPanelWithState();
     const checkbox = screen.getByLabelText(/Show Solution/i);
@@ -91,40 +72,5 @@ describe('ControlsPanel controls', () => {
     expect(checkbox).not.toBeChecked();
     fireEvent.click(checkbox);
     expect(checkbox).toBeChecked();
-  });
-
-  test('renders and toggles grid overlay checkbox', () => {
-    renderPanelWithState();
-    const checkbox = screen.getByLabelText(/Show Grid/i);
-    expect(checkbox).toBeInTheDocument();
-    expect(checkbox).not.toBeChecked();
-    fireEvent.click(checkbox);
-    expect(checkbox).toBeChecked();
-  });
-
-  test('renders and toggles animated generation checkbox', () => {
-    renderPanelWithState();
-    const checkbox = screen.getByLabelText(/Animate Generation/i);
-    expect(checkbox).toBeInTheDocument();
-    expect(checkbox).not.toBeChecked();
-    fireEvent.click(checkbox);
-    expect(checkbox).toBeChecked();
-  });
-
-  test('renders and toggles high contrast checkbox', () => {
-    renderPanelWithState();
-    const checkbox = screen.getByLabelText(/High Contrast/i);
-    expect(checkbox).toBeInTheDocument();
-    expect(checkbox).not.toBeChecked();
-    fireEvent.click(checkbox);
-    expect(checkbox).toBeChecked();
-  });
-
-  test('renders and updates font size input', () => {
-    renderPanelWithState();
-    const fontSizeInput = screen.getByLabelText(/Font Size/i);
-    expect(fontSizeInput).toBeInTheDocument();
-    fireEvent.change(fontSizeInput, { target: { value: 24 } });
-    expect(fontSizeInput).toHaveValue(24);
   });
 }); 

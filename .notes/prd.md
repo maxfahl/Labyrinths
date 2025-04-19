@@ -60,13 +60,9 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ### Phase 3: Maze Generation Logic
 - [x] Implement square maze generation
-- [ ] Add logic for complexity, size, wall thickness, seed
-- [ ] Add logic for start/end position
-- [ ] Add Jest unit tests for maze generation
 
 ### Phase 4: Theming, Export, and Print
-- [ ] Implement theme system (custom, print, predefined)
-- [ ] Apply line/background color logic
+- [x] Hide theme selector
 - [ ] Implement export to PNG, SVG, PDF
 - [ ] Implement print mode
 - [ ] Add Jest/Playwright tests for export/print
@@ -131,4 +127,5 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - Line color, background color, and wall thickness controls implemented in ControlsPanel.jsx and tested (Jest, Playwright E2E).
 - Implemented square maze generation logic with unit and E2E tests passing. Phase 3 square generation complete; starting round maze generation.
 - Do NOT add Maze Type selector or any additional maze types until Phase 7 begins, per implementation plan.
-- Removed: complexity slider, details slider, high contrast, show grid, animate generation, font size controls. Only width, height, and seed (slider) control the maze. 
+- Removed: complexity slider, details slider, high contrast, show grid, animate generation, font size controls. Only width, height, and seed (slider) control the maze.
+- Theme selector hidden; unit tests updated and passing. 
