@@ -16,10 +16,9 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
   - Squiggly
   - Spaghetti
 - **Size**: Width and height in pixels
-- **Complexity**: 1–100 (higher = more complex, smaller corridors)
+- **Seed**: Slider (0–99999) for reproducible randomization
 - **Line Color**: Color picker (if theme is custom)
 - **Background Color**: Color picker (if theme is custom)
-- **Seed**: Text/number input for reproducible randomization
 - **Start/End Position**: Choose entrance and exit (corners, sides, random, or custom)
 - **Wall Thickness**: Slider or input (px)
 - **Maze Theme**:
@@ -30,9 +29,6 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ### Additional Features
 - **Solution Path Toggle**: Show/hide the solution
-- **Grid Overlay**: Toggle grid overlay
-- **Animated Generation**: Option to animate maze creation
-- **Accessibility Options**: High-contrast mode, font size
 - **Custom Images**: Upload image for start/end marker
 - **Print Mode**: Optimized for printing
 
@@ -89,7 +85,7 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ### Phase 7: Additional Maze Types
 - [ ] Implement round maze generation
-  - [ ] Add/expand controls for round maze
+  - [ ] Add/expand controls for round maze (Maze Type selector and round maze logic must NOT be added before Phase 7)
   - [ ] Add Jest unit tests for round maze
   - [ ] Add E2E tests for round maze
 - [ ] Implement squiggly maze generation
@@ -133,4 +129,6 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 
 ## Progress Notes
 - Line color, background color, and wall thickness controls implemented in ControlsPanel.jsx and tested (Jest, Playwright E2E).
-- Implemented square maze generation logic with unit and E2E tests passing. Phase 3 square generation complete; starting round maze generation. 
+- Implemented square maze generation logic with unit and E2E tests passing. Phase 3 square generation complete; starting round maze generation.
+- Do NOT add Maze Type selector or any additional maze types until Phase 7 begins, per implementation plan.
+- Removed: complexity slider, details slider, high contrast, show grid, animate generation, font size controls. Only width, height, and seed (slider) control the maze. 

@@ -6,21 +6,20 @@ interface MazePreviewProps {
   options: MazeOptions;
 }
 
-const CELL_SIZE = 24;
+const BASE_SVG_SIZE = 600;
 
 const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
   // Memoize maze generation so toggling showSolution does not regenerate the maze
   const mazeDeps = useMemo(() => {
-    // Only include options that affect maze structure
-    const { width, height, complexity, wallThickness, seed, startPosition, endPosition } = options;
-    return { width, height, complexity, wallThickness, seed, startPosition, endPosition };
-  }, [options.width, options.height, options.complexity, options.wallThickness, options.seed, options.startPosition, options.endPosition]);
+    const { width, height, wallThickness, seed, startPosition, endPosition } = options;
+    return { width, height, wallThickness, seed, startPosition, endPosition };
+  }, [options.width, options.height, options.wallThickness, options.seed, options.startPosition, options.endPosition]);
 
   const maze = useMemo(() => {
     return generateSquareMaze({
       width: options.width,
       height: options.height,
-      complexity: options.complexity,
+      complexity: 100,
       wallThickness: options.wallThickness,
       seed: options.seed,
       startPosition: options.startPosition,
@@ -34,80 +33,50 @@ const MazePreview: React.FC<MazePreviewProps> = ({ options }) => {
     );
   }
 
-  // High contrast mode
-  const isHighContrast = options.highContrast;
-  const svgBgColor = isHighContrast ? '#000' : options.bgColor;
-  const svgLineColor = isHighContrast ? '#fff' : options.lineColor;
-  const fontSize = options.fontSize || 16;
-
-  // Helper to render grid overlay for square mazes
-  function renderGridOverlay(w: number, h: number, padding: number) {
-    const lines = [];
-    for (let x = 1; x < options.width; x++) {
-      lines.push(
-        <line
-          key={`vgrid-${x}`}
-          x1={x * CELL_SIZE + padding}
-          y1={padding}
-          x2={x * CELL_SIZE + padding}
-          y2={h + padding}
-          stroke={svgLineColor}
-          strokeWidth={1}
-          strokeDasharray="4 4"
-          opacity={0.3}
-        />
-      );
-    }
-    for (let y = 1; y < options.height; y++) {
-      lines.push(
-        <line
-          key={`hgrid-${y}`}
-          x1={padding}
-          y1={y * CELL_SIZE + padding}
-          x2={w + padding}
-          y2={y * CELL_SIZE + padding}
-          stroke={svgLineColor}
-          strokeWidth={1}
-          strokeDasharray="4 4"
-          opacity={0.3}
-        />
-      );
-    }
-    return lines;
-  }
-
-  const w = options.width * CELL_SIZE;
-  const h = options.height * CELL_SIZE;
+  // Cell size is determined by SVG size / cell count
+  const CELL_SIZE = Math.min(
+    (BASE_SVG_SIZE - 2 * (options.svgPadding ?? 20)) / options.width,
+    (BASE_SVG_SIZE - 2 * (options.svgPadding ?? 20)) / options.height
+  );
   const padding = options.svgPadding ?? 20;
+  const fontSize = 16;
+
   return (
     <section className="flex-1 min-w-0 h-full flex flex-col items-center justify-start bg-none border-none shadow-none p-0">
       <h2 style={{ fontSize }}>{'Maze Preview'}</h2>
       <svg
-        width={w + 2 * padding}
-        height={h + 2 * padding}
-        style={{ background: options.highContrast ? '#000' : options.bgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }}
+        width={BASE_SVG_SIZE}
+        height={BASE_SVG_SIZE}
+        style={{ background: options.bgColor, display: 'block', maxWidth: '100%', border: '1px solid #ccc' }}
         role="img"
         aria-label="Maze Preview"
       >
-        {/* Draw grid overlay if enabled */}
-        {options.showGrid && renderGridOverlay(w, h, padding)}
+        {/* No grid overlay */}
         {/* Draw maze walls */}
         {maze.walls.map((wall, i) => {
-          const x = wall.x * CELL_SIZE + padding;
-          const y = wall.y * CELL_SIZE + padding;
-          let x2 = x, y2 = y;
+          const baseX = wall.x * CELL_SIZE + padding;
+          const baseY = wall.y * CELL_SIZE + padding;
+          let x1 = baseX, y1 = baseY, x2 = baseX, y2 = baseY;
           switch (wall.dir) {
-            case 'N': x2 = x + CELL_SIZE; y2 = y; break;
-            case 'S': x2 = x + CELL_SIZE; y2 = y + CELL_SIZE; break;
-            case 'E': x2 = x + CELL_SIZE; y2 = y + CELL_SIZE; y2 = y; break;
-            case 'W': x2 = x; y2 = y + CELL_SIZE; break;
+            case 'N':
+              x2 = baseX + CELL_SIZE;
+              break;
+            case 'S':
+              y1 = baseY + CELL_SIZE;
+              x2 = baseX + CELL_SIZE;
+              y2 = baseY + CELL_SIZE;
+              break;
+            case 'E':
+              x1 = baseX + CELL_SIZE;
+              x2 = baseX + CELL_SIZE;
+              y2 = baseY + CELL_SIZE;
+              break;
+            case 'W':
+              y2 = baseY + CELL_SIZE;
+              break;
           }
-          const wallColor = isHighContrast ? svgLineColor : options.lineColor;
-          if (wall.dir === 'N') return <line key={i} x1={x} y1={y} x2={x2} y2={y2} stroke={wallColor} strokeWidth={options.wallThickness} />;
-          if (wall.dir === 'S') return <line key={i} x1={x} y1={y + CELL_SIZE} x2={x + CELL_SIZE} y2={y + CELL_SIZE} stroke={wallColor} strokeWidth={options.wallThickness} />;
-          if (wall.dir === 'E') return <line key={i} x1={x + CELL_SIZE} y1={y} x2={x + CELL_SIZE} y2={y + CELL_SIZE} stroke={wallColor} strokeWidth={options.wallThickness} />;
-          if (wall.dir === 'W') return <line key={i} x1={x} y1={y} x2={x} y2={y + CELL_SIZE} stroke={wallColor} strokeWidth={options.wallThickness} />;
-          return null;
+          const wallColor = options.lineColor;
+          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={wallColor} strokeWidth={options.wallThickness} />;
         })}
         {/* Draw solution path if enabled */}
         {options.showSolution && maze.solution.length > 1 && (

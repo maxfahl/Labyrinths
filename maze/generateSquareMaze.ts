@@ -53,14 +53,14 @@ export function generateSquareMaze(options: MazeOptions): MazeData {
     }))
   );
   // Pick start and end positions
-  let start = getPosition(startPosition, width, height);
-  let end = getPosition(endPosition, width, height, { avoid: start });
+  let start = getPosition(startPosition, width, height, rng);
+  let end = getPosition(endPosition, width, height, rng, { avoid: start });
   // If start and end are still the same, pick a different end
   if (start.x === end.x && start.y === end.y) {
-    if (endPosition === 'top') end = getPosition('bottom', width, height, { avoid: start });
-    else if (endPosition === 'bottom') end = getPosition('top', width, height, { avoid: start });
-    else if (endPosition === 'left') end = getPosition('right', width, height, { avoid: start });
-    else if (endPosition === 'right') end = getPosition('left', width, height, { avoid: start });
+    if (endPosition === 'top') end = getPosition('bottom', width, height, rng, { avoid: start });
+    else if (endPosition === 'bottom') end = getPosition('top', width, height, rng, { avoid: start });
+    else if (endPosition === 'left') end = getPosition('right', width, height, rng, { avoid: start });
+    else if (endPosition === 'right') end = getPosition('left', width, height, rng, { avoid: start });
     else end = { x: (start.x + 1) % width, y: start.y };
   }
   // DFS stack
@@ -107,18 +107,6 @@ export function generateSquareMaze(options: MazeOptions): MazeData {
   if (end.x === width - 1) grid[end.y][end.x].walls.E = false;
   if (end.y === 0) grid[end.y][end.x].walls.N = false;
   if (end.y === height - 1) grid[end.y][end.x].walls.S = false;
-  // Collect walls for rendering
-  const walls: MazeWall[] = [];
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const cell = grid[y][x];
-      for (const dir of ['N', 'E', 'S', 'W'] as const) {
-        if (cell.walls[dir]) {
-          walls.push({ x, y, dir });
-        }
-      }
-    }
-  }
   // Find solution path from end to start
   let solution: MazePosition[] = [];
   let cur: MazePosition | null = end;
@@ -130,10 +118,75 @@ export function generateSquareMaze(options: MazeOptions): MazeData {
   solution = solution.reverse();
   // Remove visited flags for output
   for (let row of grid) for (let cell of row) delete cell.visited;
+  
+  // --- COMPLEXITY LOGIC (DEAD‑END BRAIDING) ---
+  // Reduce dead ends by connecting some of them to neighboring cells.
+  // complexity: 100 = keep all dead ends (perfect maze)
+  // complexity: 1   = braid almost every dead end (few dead ends)
+  if (options.complexity < 100) {
+    // Gather dead‑end cells (cells with 3 walls intact)
+    const deadEnds: { x: number; y: number }[] = [];
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const cell = grid[y][x];
+        const wallCount = (cell.walls.N ? 1 : 0) + (cell.walls.E ? 1 : 0) + (cell.walls.S ? 1 : 0) + (cell.walls.W ? 1 : 0);
+        if (wallCount === 3) deadEnds.push({ x, y });
+      }
+    }
+    // Determine how many dead ends to braid
+    const targetRemove = Math.floor(deadEnds.length * (1 - options.complexity / 100));
+    // Shuffle deadEnds for randomness
+    for (let i = deadEnds.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      [deadEnds[i], deadEnds[j]] = [deadEnds[j], deadEnds[i]];
+    }
+    let removed = 0;
+    for (const { x, y } of deadEnds) {
+      if (removed >= targetRemove) break;
+      const cell = grid[y][x];
+      // Pick a random present wall to remove that has a neighbor cell inside bounds
+      const dirs = [
+        { dir: 'N' as const, dx: 0, dy: -1, opp: 'S' as const },
+        { dir: 'E' as const, dx: 1, dy: 0, opp: 'W' as const },
+        { dir: 'S' as const, dx: 0, dy: 1, opp: 'N' as const },
+        { dir: 'W' as const, dx: -1, dy: 0, opp: 'E' as const },
+      ].filter(d => cell.walls[d.dir]);
+      // Shuffle dirs
+      for (let i = dirs.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [dirs[i], dirs[j]] = [dirs[j], dirs[i]];
+      }
+      for (const d of dirs) {
+        const nx = x + d.dx;
+        const ny = y + d.dy;
+        if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+          // Remove wall between cell and neighbor
+          cell.walls[d.dir] = false;
+          grid[ny][nx].walls[d.opp] = false;
+          removed++;
+          break;
+        }
+      }
+    }
+  }
+
+  // Collect walls for rendering AFTER complexity adjustments
+  const walls: MazeWall[] = [];
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const cell = grid[y][x];
+      for (const dir of ['N', 'E', 'S', 'W'] as const) {
+        if (cell.walls[dir]) {
+          walls.push({ x, y, dir });
+        }
+      }
+    }
+  }
+
   return { grid, walls, start, end, solution };
 }
 
-function getPosition(pos: string, width: number, height: number, other?: { avoid?: { x: number, y: number } }): MazePosition {
+function getPosition(pos: string, width: number, height: number, rng: () => number, other?: { avoid?: { x: number, y: number } }): MazePosition {
   if (pos === 'random') {
     // Pick a random edge cell
     const edges = [];
@@ -150,10 +203,9 @@ function getPosition(pos: string, width: number, height: number, other?: { avoid
     if (other?.avoid) {
       candidates = edges.filter(e => e.x !== other.avoid!.x || e.y !== other.avoid!.y);
     }
-    const idx = Math.floor(Math.random() * candidates.length);
+    const idx = Math.floor(rng() * candidates.length);
     return candidates[idx];
   }
-  const rng = seedrandom();
   if (pos === 'top-left') return { x: 0, y: 0 };
   if (pos === 'top-right') return { x: width - 1, y: 0 };
   if (pos === 'bottom-left') return { x: 0, y: height - 1 };

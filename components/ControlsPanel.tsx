@@ -34,7 +34,7 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
   return (
     <Card className="w-full h-full flex flex-col">
       <CardHeader>
-        <CardTitle style={{ fontSize: options.fontSize }}>{'Controls'}</CardTitle>
+        <CardTitle>{'Controls'}</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col gap-6 overflow-auto max-h-[80vh] scrollbar-none" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <div className="flex flex-col gap-2">
@@ -63,40 +63,31 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-2" role="group" aria-labelledby="complexity-label">
-          <Label id="complexity-label" htmlFor="complexity" className="">Complexity: {options.complexity}</Label>
-          <Slider
-            id="complexity"
-            min={1}
-            max={100}
-            value={[options.complexity]}
-            onValueChange={([val]: [number]) => setOptions({ ...options, complexity: val })}
-            thumbProps={{ 'aria-label': 'Complexity' }}
-            className=""
-            defaultValue={undefined}
-          />
-        </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="line-color" className="">Line Color</Label>
-          <Input
-            id="line-color"
-            type="color"
-            value={options.lineColor}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, lineColor: e.target.value })}
-            aria-label="Line Color"
-            className="w-12 h-12 p-0 border-none bg-transparent"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="bg-color" className="">Background Color</Label>
-          <Input
-            id="bg-color"
-            type="color"
-            value={options.bgColor}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, bgColor: e.target.value })}
-            aria-label="Background Color"
-            className="w-12 h-12 p-0 border-none bg-transparent"
-          />
+          <div className="flex flex-row gap-4 items-center">
+            <div className="flex flex-col items-center gap-1">
+              <Label htmlFor="line-color" className="">Line Color</Label>
+              <Input
+                id="line-color"
+                type="color"
+                value={options.lineColor}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, lineColor: e.target.value })}
+                aria-label="Line Color"
+                className="w-12 h-12 p-0 border-none bg-transparent"
+              />
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <Label htmlFor="bg-color" className="">Background Color</Label>
+              <Input
+                id="bg-color"
+                type="color"
+                value={options.bgColor}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, bgColor: e.target.value })}
+                aria-label="Background Color"
+                className="w-12 h-12 p-0 border-none bg-transparent"
+              />
+            </div>
+          </div>
         </div>
         <div className="flex flex-col gap-2" role="group" aria-labelledby="wall-thickness-label">
           <Label id="wall-thickness-label" htmlFor="wall-thickness" className="">Wall Thickness: {options.wallThickness}px</Label>
@@ -125,16 +116,17 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
             className="w-20"
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="seed" className="">Seed</Label>
-          <Input
+        <div className="flex flex-col gap-2" role="group" aria-labelledby="seed-label">
+          <Label id="seed-label" htmlFor="seed" className="">Seed: {options.seed}</Label>
+          <Slider
             id="seed"
-            type="text"
-            value={options.seed}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, seed: e.target.value })}
-            aria-label="Seed"
-            placeholder="Enter seed (optional)"
-            className="w-full"
+            min={0}
+            max={99999}
+            value={[Number(options.seed)]}
+            onValueChange={([val]: [number]) => setOptions({ ...options, seed: String(val) })}
+            thumbProps={{ 'aria-label': 'Seed' }}
+            className=""
+            defaultValue={undefined}
           />
         </div>
         <div className="flex flex-col md:flex-row gap-2">
@@ -193,56 +185,7 @@ function ControlsPanel({ options, setOptions }: ControlsPanelProps) {
           />
           <Label htmlFor="show-solution" className="">Show Solution</Label>
         </div>
-        {/* Grid Overlay Toggle */}
-        <div className="flex items-center gap-2">
-          <input
-            id="show-grid"
-            type="checkbox"
-            checked={options.showGrid}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, showGrid: e.target.checked })}
-            aria-label="Show Grid"
-            className="accent-primary w-5 h-5"
-          />
-          <Label htmlFor="show-grid" className="">Show Grid</Label>
-        </div>
-        {/* Animated Generation Toggle */}
-        <div className="flex items-center gap-2">
-          <input
-            id="animate-generation"
-            type="checkbox"
-            checked={options.animateGeneration}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, animateGeneration: e.target.checked })}
-            aria-label="Animate Generation"
-            className="accent-primary w-5 h-5"
-          />
-          <Label htmlFor="animate-generation" className="">Animate Generation</Label>
-        </div>
-        {/* Accessibility: High Contrast Toggle */}
-        <div className="flex items-center gap-2">
-          <input
-            id="high-contrast"
-            type="checkbox"
-            checked={options.highContrast}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, highContrast: e.target.checked })}
-            aria-label="High Contrast"
-            className="accent-primary w-5 h-5"
-          />
-          <Label htmlFor="high-contrast" className="">High Contrast</Label>
-        </div>
-        {/* Accessibility: Font Size Input */}
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="font-size" className="">Font Size</Label>
-          <Input
-            id="font-size"
-            type="number"
-            min={10}
-            max={48}
-            value={options.fontSize}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, fontSize: Number(e.target.value) })}
-            aria-label="Font Size"
-            className="w-24"
-          />
-        </div>
+        {/* Grid/Animation/Contrast toggles removed */}
       </CardContent>
     </Card>
   );

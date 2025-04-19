@@ -5,7 +5,6 @@ import MazePreview from './components/MazePreview';
 export interface MazeOptions {
   width: number;
   height: number;
-  complexity: number;
   lineColor: string;
   bgColor: string;
   wallThickness: number;
@@ -14,17 +13,12 @@ export interface MazeOptions {
   endPosition: string;
   mazeTheme: string;
   showSolution: boolean;
-  showGrid: boolean;
-  animateGeneration: boolean;
-  highContrast: boolean;
-  fontSize: number;
   svgPadding: number;
 }
 
 export const defaultOptions: MazeOptions = {
   width: 20,
   height: 20,
-  complexity: 50,
   lineColor: '#000000',
   bgColor: '#ffffff',
   wallThickness: 4,
@@ -33,10 +27,6 @@ export const defaultOptions: MazeOptions = {
   endPosition: 'bottom-right',
   mazeTheme: 'custom',
   showSolution: false,
-  showGrid: false,
-  animateGeneration: false,
-  highContrast: false,
-  fontSize: 16,
   svgPadding: 20,
 };
 
