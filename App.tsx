@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ControlsPanel from './components/ControlsPanel';
+import ExportButtons from './components/ExportButtons';
 import MazePreview from './components/MazePreview';
 
 export interface MazeOptions {
@@ -32,6 +33,8 @@ export const defaultOptions: MazeOptions = {
 
 function App() {
   const [mazeOptions, setMazeOptions] = useState<MazeOptions>(defaultOptions);
+  const svgRef = useRef<SVGSVGElement>(null!);
+
   return (
     <div className="font-sans bg-gray-100 min-h-screen min-w-full h-screen w-screen">
       <main className="flex flex-row items-stretch h-screen w-screen box-border gap-8 p-8">
@@ -39,7 +42,8 @@ function App() {
           <ControlsPanel options={mazeOptions} setOptions={setMazeOptions} />
         </section>
         <section className="flex-1 min-w-0 h-full flex flex-col items-center justify-start bg-none border-none shadow-none p-0">
-          <MazePreview options={mazeOptions} />
+          <MazePreview ref={svgRef} options={mazeOptions} />
+          <ExportButtons svgRef={svgRef} />
         </section>
       </main>
     </div>

@@ -7,7 +7,7 @@ interface MazePreviewProps {
   options: MazeOptions;
 }
 
-const MazePreview = forwardRef<SVGSVGElement | null, MazePreviewProps>(({ options }, svgRef) => {
+const MazePreview = forwardRef<SVGSVGElement, MazePreviewProps>(({ options }, svgRef) => {
   // Memoize maze generation so toggling showSolution does not regenerate the maze
   const mazeDeps = useMemo(() => {
     const { width, height, wallThickness, seed, startPosition, endPosition } = options;
