@@ -71,7 +71,7 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Save generated mazes with a name (settings, seed, preview image) to local storage
 - [x] Display history with preview images
 - [x] Allow restoring previous mazes from history
-- [ ] Add Jest/Playwright tests for history/persistence
+- [x] Add Jest/Playwright tests for history/persistence
 
 ### Phase 6: Final Polish & Deployment
 - [ ] Polish UI/UX, accessibility

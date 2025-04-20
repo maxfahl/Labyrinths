@@ -82,7 +82,7 @@ const MazePreview = forwardRef<SVGSVGElement, MazePreviewProps>(({ options }, sv
                     break;
                 }
                 const wallColor = options.lineColor;
-                return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={wallColor} strokeWidth={options.wallThickness} />;
+                return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={wallColor} strokeWidth={options.wallThickness} strokeLinecap="round" />;
               });
             })()}
             {/* Draw solution path if enabled */}
@@ -96,6 +96,8 @@ const MazePreview = forwardRef<SVGSVGElement, MazePreviewProps>(({ options }, sv
                   fill="none"
                   stroke="red"
                   strokeWidth={options.wallThickness}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   points={maze.solution.map(pos => `${pos.x * CELL_SIZE + CELL_SIZE / 2 + padding},${pos.y * CELL_SIZE + CELL_SIZE / 2 + padding}`).join(' ')}
                 />
               );
