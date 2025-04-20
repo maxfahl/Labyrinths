@@ -74,8 +74,8 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - [x] Add Jest/Playwright tests for history/persistence
 
 ### Phase 6: Final Polish & Deployment
-- [ ] Polish UI/UX, accessibility
-- [ ] Add README and usage instructions
+- [x] Polish UI/UX, accessibility
+- [x] Add README and usage instructions
 - [ ] Prepare and deploy to Vercel/Netlify
 
 ### Phase 7: Additional Maze Types
@@ -128,4 +128,6 @@ A web app that allows users to generate, customize, and export labyrinths/mazes 
 - Do NOT add Maze Type selector or any additional maze types until Phase 7 begins, per implementation plan.
 - Removed: complexity slider, details slider, high contrast, show grid, animate generation, font size controls. Only width, height, and seed (slider) control the maze.
 - Theme selector hidden; unit tests updated and passing.
-- Export buttons (SVG, PNG, PDF, Print) implemented; dependencies added; dev server runs without errors. 
+- Export buttons (SVG, PNG, PDF, Print) implemented; dependencies added; dev server runs without errors.
+- Detailed README with installation, usage, testing and deployment instructions added. Phase 6 README task complete.
+- Added accessible Skip‑Link and updated document title. UI/UX & accessibility polish done. 

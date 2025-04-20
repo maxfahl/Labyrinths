@@ -4,6 +4,7 @@ import ExportButtons from './components/ExportButtons';
 import MazeHistoryList from './components/MazeHistoryList';
 import MazePreview from './components/MazePreview';
 import SaveMazeButton from './components/SaveMazeButton';
+import SkipLink from './components/SkipLink';
 import { deleteMaze, generateMazeId, loadMazeHistory, SavedMaze, saveMaze } from './lib/history';
 
 export interface MazeOptions {
@@ -41,7 +42,9 @@ function App() {
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen min-w-full h-screen w-screen">
-      <main className="flex flex-row items-stretch h-screen w-screen box-border gap-8 p-8">
+      {/* Accessibility skip‑link */}
+      <SkipLink />
+      <main id="main-content" className="flex flex-row items-stretch h-screen w-screen box-border gap-8 p-8">
         <section className="w-[350px] min-w-[350px] max-w-[350px] h-full flex flex-col justify-start bg-none border-none shadow-none p-0">
           <ControlsPanel options={mazeOptions} setOptions={setMazeOptions} />
         </section>
